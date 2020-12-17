@@ -5,24 +5,24 @@ Projet PHP - 2e année de DUT Informatique
 
 ### Participant
 
-- [ ] *Afficher une liste de souhaits*
-- [ ] *Afficher un item d'une liste* 
-- [ ] *Réserver un item*
-- [ ] *Ajouter un message avec sa réservation*
-- [ ] *Ajouter un message sur une liste*
+- [ ] *Afficher une liste de souhaits* (Sangoan, Yoan)
+- [ ] *Afficher un item d'une liste* (Sangoan, Yoan)
+- [ ] *Réserver un item* (Matthieu, Victor)
+- [ ] *Ajouter un message avec sa réservation* (Matthieu, Victor)
+- [ ] *Ajouter un message sur une liste* (Sangoan, Yoan)
 
 ### Créateur
-- [ ] *Créer une liste*
-- [ ] *Modifier les informations générales d'une de ses listes*
-- [ ] *Ajouter des items* 
-- [ ] *Modifier un item* 
-- [ ] *Supprimer un item* 
-- [ ] *Rajouter une image à un item* 
-- [ ] *Modifier une image à un item* 
-- [ ] *Supprimer une image d'un item* 
-- [ ] *Partager une liste* 
-- [ ] *Consulter les réservations d'une de ses listes avant échéance* 
-- [ ] *Consulter les réservations et messages d'une de ses listes après échéance* 
+- [ ] *Créer une liste* (Sangoan, Yoan)
+- [ ] *Modifier les informations générales d'une de ses listes* (Sangoan, Yoan)
+- [ ] *Ajouter des items* (Matthieu, Victor)
+- [ ] *Modifier un item*  (Matthieu, Victor)
+- [ ] *Supprimer un item* (Matthieu, Victor)
+- [ ] *Rajouter une image à un item* (Matthieu, Victor)
+- [ ] *Modifier une image à un item* (Matthieu, Victor)
+- [ ] *Supprimer une image d'un item* (Matthieu, Victor)
+- [ ] *Partager une liste* (Sangoan, Yoan)
+- [ ] *Consulter les réservations d'une de ses listes avant échéance* (Sangoan, Yoan)
+- [ ] *Consulter les réservations et messages d'une de ses listes après échéance* (Sangoan, Yoan)
 
 ### Extensions
 - [ ] *Créer un compte* 
