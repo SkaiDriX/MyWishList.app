@@ -1,6 +1,40 @@
 # MyWishList.app
 Projet PHP - 2e année de DUT Informatique
 
+## Installation
+
+Utilisez [composer](https://getcomposer.org/) pour installer ce projet.
+
+```bash
+git clone git@github.com:SkaiDriX/MyWishList.app.git
+cd MyWishList.app
+composer install
+```
+Il faut maintenant créer un fichier de configuration nommé **conf.ini** dans le répertoire conf/ pour pouvoir établir la connexion avec la base de donnée.
+Ce fichier doit être de la forme suivante :
+
+```bash
+driver= ?
+username= ?
+password= ?
+host= ?
+database= ?
+charset=utf8
+collation=utf8_unicode_ci
+```
+
+Avec les valeurs suivantes :
+
+| Paramètre     | Description                                   |
+| :------------:|:---------------------------------------------:|
+| driver        | Le driver utilisé (exemple : mysql)           |
+| host          | Le serveur de votre BDD (exemple : localhost) |
+| database      | Nom de la base de donnée (exemple : wishlist) |
+| username      | Nom d'utilisateur de la BDD (exemple : root)  |
+| password      | Mot de passe de la BDD (exemple : root)       |
+
+Pour terminer, veuillez importer le fichier **base.sql** (présent dans le répertoire conf/) dans votre base de donnée pour charger les tables requises.
+
 ## Les fonctionnalités
 
 ### Participant
