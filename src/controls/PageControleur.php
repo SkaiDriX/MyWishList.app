@@ -6,6 +6,8 @@ use \Psr\Http\Message\ResponseInterface as Response;
 
 use \mywishlist\models\Liste as Liste;
 
+use \mywishlist\vues\VuePage as VuePage;
+
 class PageControleur {
 	private $app;
 	
@@ -14,15 +16,10 @@ class PageControleur {
 	}
 
 	public function index(Request $rq, Response $rs, $args) {
-		$rs->getBody()->write('Accueil du site<br><br>') ;
+		$data = Liste::select('titre', 'description', 'token') -> where ('publique', '=', 1)->get()->toArray();
 
-		$query = Liste::select('titre', 'description', 'token') -> where ('publique', '=', 1);
-		$res = $query->get();
-
-		foreach ($res as $entree) {
-			echo '<b>' . $entree->titre . '</b><br>' . $entree->description . '<br><br> Token : ' . $entree->token . '<br><br>';
-		}
-
+		$vue = new VuePage($data, $this->app ) ;
+		$rs->getBody()->write($vue->render()) ;
 		return $rs;
 	}
 }
