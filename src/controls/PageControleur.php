@@ -6,7 +6,7 @@ use \Psr\Http\Message\ResponseInterface as Response;
 
 use \mywishlist\models\Liste as Liste;
 
-use \mywishlist\vues\VuePage as VuePage;
+use \mywishlist\views\VuePage as VuePage;
 
 class PageControleur {
 	private $app;

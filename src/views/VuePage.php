@@ -1,6 +1,6 @@
 <?php
 
-namespace mywishlist\vues;
+namespace mywishlist\views;
 
 class VuePage {
 	private $args;
