@@ -12,14 +12,17 @@ class PageControleur {
 	public function __construct($app) {
 		$this->app = $app;
 	}
+
 	public function index(Request $rq, Response $rs, $args) {
 		$rs->getBody()->write('Accueil du site<br><br>') ;
 
-		$query = Liste::select('id', 'titre', 'description') -> where ('publique', '=', 1);
+		$query = Liste::select('titre', 'description', 'token') -> where ('publique', '=', 1);
 		$res = $query->get();
+
 		foreach ($res as $entree) {
-			echo '<b>' . $entree->titre . '</b><br>' . $entree->description . '<br><br>';
+			echo '<b>' . $entree->titre . '</b><br>' . $entree->description . '<br><br> Token : ' . $entree->token . '<br><br>';
 		}
+
 		return $rs;
 	}
 }

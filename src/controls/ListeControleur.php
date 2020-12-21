@@ -33,37 +33,43 @@ class ListeControleur {
 		$tokenPublic = $args['tokenPublic'];
 		$tokenPrivate = $args['tokenPrivate'];
 
-		$query = Liste::select('id', 'titre', 'description', 'token', 'token_edit') -> where ('token', '=', $tokenPublic);
-		$res = $query->get();
+		$liste = Liste::select('titre', 'description', 'token_edit') -> where ('token', '=', $tokenPublic)->first();
 
-		if($res->isEmpty()){
-			$this->app->router->pathFor('accueil');
-		}else{
-			foreach ($res as $entree) {
-				if($tokenPrivate == $entree->token_edit){
-					echo '<b>' . $entree->titre . '</b><br>' . $entree->description . '<br><br>';
-				}else{
-					echo '<h2>Token d\'édition incorrect.</h2>';
-				}
+		if(is_null($liste)){  
+			// LISTE NON EXISTANTE
+			return $rs->withRedirect($this->app->router->pathFor('accueil')); 
+		} else{
+			if($tokenPrivate == $liste->token_edit){
+				// C BON
+				echo '<b>' . $liste->titre . '</b><br>' . $liste->description . '<br><br>';
+			}else{
+				// TOKEN INVALIDE
+				return $rs->withRedirect($this->app->router->pathFor('accueil')); 
 			}
-			
 		}
-		
-		
+			
 		return $rs;
-	}		
+	}
 
 	public function updateListe(Request $rq, Response $rs, $args) : Response {
-		$post = $rq->getParsedBody() ;
-        $titre = filter_var($post['titre'], FILTER_SANITIZE_STRING) ;
-        $description = filter_var($post['description'] , FILTER_SANITIZE_STRING) ;
-        $l = new Liste();
-        $l->titre = $titre;
-        $l->description = $description;
-        $l->save();
-        
-        $url_listes = $this->app->router->pathFor( 'aff_listes' ) ;    
-        return $rs->withRedirect($url_listes); 
+
+		$tokenPublic = $args['tokenPublic'];
+		$tokenPrivate = $args['tokenPrivate'];	
+
+		$liste = Liste::select('titre', 'description', 'token_edit') -> where ('token', '=', $tokenPublic)->first();
+
+		if(!is_null($liste) && ($tokenPrivate == $liste->token_edit)){  
+			$post = $rq->getParsedBody() ;
+			$titre = filter_var($post['titre'], FILTER_SANITIZE_STRING) ;
+			$description = filter_var($post['description'] , FILTER_SANITIZE_STRING) ;
+
+			$liste->titre = $titre;
+			$liste->description = $description;
+			$liste->save();
+		}
+		
+		// NORMALEMENT REDIRECTION VERS LA PAGE DE LA LISTE MAIS PLUS TARD DU COUP
+        return $rs->withRedirect($this->app->router->pathFor('accueil')); 
 	}
 
 	public function addMessage(Request $rq, Response $rs, $args) {
