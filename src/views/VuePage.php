@@ -2,41 +2,30 @@
 
 namespace mywishlist\views;
 
-class VuePage {
-	private $args;
-	private $container; 
+class VuePage extends Vue
+{
+  public function __construct($data, $container)
+  {
+    parent::__construct($data, $container);
+  }
 
-    public function __construct($args, $container) {
-		$this->args = $args;
-		$this->container = $container;
-    }
-    
-    private function listePublique() : string {
-      $html = "<ul>";
-      
-      foreach($this->args as $data) {
-        $html = $html."<li>".$data['titre']."</li>";
-      }  
+  private function listePublique(): string
+  {
+    $html = "<ul>";
 
-      $html = $html."</ul>";
-		  return $html;
+    foreach ($this->data as $data) {
+      $html = $html . "<li>" . $data['titre'] . "</li>";
     }
-    
-    public function render() {
-        $content = $this->listePublique();
 
-        $html = <<<FIN
-        <!DOCTYPE html>
-        <html>
-          <head>
-            <title>Exemple</title>
-          </head>
-          <body>
-            <h1>Accueil</h1>
-            $content
-          </body>
-        </html>
-FIN;
-        return $html;
-    }
+    $html = $html . "</ul>";
+    return $html;
+  }
+
+  public function render($i = null)
+  {
+    $this->content = $this->listePublique();
+    $this->titre_page = "Accueil";
+
+    return parent::render();
+  }
 }

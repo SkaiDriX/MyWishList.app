@@ -3,9 +3,7 @@ namespace mywishlist\controls;
 
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
-
 use \mywishlist\models\Liste as Liste;
-
 use \mywishlist\views\VueListe as VueListe;
 
 use DateTime;
@@ -95,19 +93,19 @@ class ListeControleur {
 		$tokenPublic = $args['tokenPublic'];
 		$tokenPrivate = $args['tokenPrivate'];
 		
-
-		$liste = Liste::select('titre', 'description', 'token_edit', 'expiration') -> where ('token', '=', $tokenPublic)->first();
-		$expiration = $liste->expiration;
+		$liste = Liste::where('token', '=', $tokenPublic)->first();
 
 		if(is_null($liste)){  
 			// LISTE NON EXISTANTE
 			return $rs->withRedirect($this->app->router->pathFor('accueil')); 
-		} else if ($tokenPrivate != $liste->token_edit) {
+		} 
+		else if (!$liste->isEditable($tokenPrivate)) 
+		{
 			// TOKEN INVALIDE
 			return $rs->withRedirect($this->app->router->pathFor('accueil')); 
-		}
-
-		if (new DateTime() > new DateTime($expiration)) {
+		} 
+		else if ($liste->isExpired()) 
+		{
 			// LISTE EXPIREE
 			return $rs->withRedirect($this->app->router->pathFor('accueil')); 
 		}
@@ -128,32 +126,39 @@ class ListeControleur {
 
 		$liste = Liste::where ('token', '=', $tokenPublic)->first();
 
-		if(!is_null($liste) && ($tokenPrivate == $liste->token_edit)){  
-			$post = $rq->getParsedBody() ;
-			$titre = filter_var($post['titre'], FILTER_SANITIZE_STRING) ;
-			$description = filter_var($post['desc'] , FILTER_SANITIZE_STRING);
-			$visibilite = $post['visibility'];
-
-			if(strlen($titre) < 4) {
-				// Message erreur titre
-				return $rs->withRedirect($this->app->router->pathFor('create_liste')); 
-			} else if(strlen($description) < 4) {
-				// Message erreur descritpion
-				return $rs->withRedirect($this->app->router->pathFor('create_liste')); 
-			} 
-
-			$liste->titre = $titre;
-			$liste->description = $description;
-			$pub = 0;
-			if($visibilite = 'public'){
-				$pub = 1;
-			}
-			$liste->publique = $pub;
-			$liste->save();
-		} else {
-			// MESSAGE ERREUR LISTE 
+		if(is_null($liste)){  
+			// LISTE NON EXISTANTE
+			return $rs->withRedirect($this->app->router->pathFor('accueil')); 
+		} 
+		else if (!$liste->isEditable($tokenPrivate)) 
+		{
+			// TOKEN INVALIDE
+			return $rs->withRedirect($this->app->router->pathFor('accueil')); 
+		} 
+		else if ($liste->isExpired()) 
+		{
+			// LISTE EXPIREE
+			return $rs->withRedirect($this->app->router->pathFor('accueil')); 
 		}
-		
+
+		$post = $rq->getParsedBody() ;
+		$titre = filter_var($post['titre'], FILTER_SANITIZE_STRING) ;
+		$description = filter_var($post['desc'] , FILTER_SANITIZE_STRING);
+		$visibilite = filter_var($post['visibility'] , FILTER_SANITIZE_STRING);
+
+		if(strlen($titre) < 4) {
+			// Message erreur titre
+			return $rs->withRedirect($this->app->router->pathFor('create_liste')); 
+		} else if(strlen($description) < 4) {
+			// Message erreur descritpion
+			return $rs->withRedirect($this->app->router->pathFor('create_liste')); 
+		} 
+
+		$liste->titre = $titre;
+		$liste->description = $description;
+		$liste->publique = ($visibilite == 'public') ? 1 : 0;
+		$liste->save();
+
 		// NORMALEMENT REDIRECTION VERS LA PAGE DE LA LISTE MAIS PLUS TARD DU COUP
         return $rs->withRedirect($this->app->router->pathFor('accueil')); 
 	}
