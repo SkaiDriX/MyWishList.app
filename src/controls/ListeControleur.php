@@ -94,14 +94,21 @@ class ListeControleur {
 	public function editListe(Request $rq, Response $rs, $args) {
 		$tokenPublic = $args['tokenPublic'];
 		$tokenPrivate = $args['tokenPrivate'];
+		
 
-		$liste = Liste::select('titre', 'description', 'token_edit') -> where ('token', '=', $tokenPublic)->first();
+		$liste = Liste::select('titre', 'description', 'token_edit', 'expiration') -> where ('token', '=', $tokenPublic)->first();
+		$expiration = $liste->expiration;
 
 		if(is_null($liste)){  
 			// LISTE NON EXISTANTE
 			return $rs->withRedirect($this->app->router->pathFor('accueil')); 
 		} else if ($tokenPrivate != $liste->token_edit) {
 			// TOKEN INVALIDE
+			return $rs->withRedirect($this->app->router->pathFor('accueil')); 
+		}
+
+		if (new DateTime() > new DateTime($expiration)) {
+			// LISTE EXPIREE
 			return $rs->withRedirect($this->app->router->pathFor('accueil')); 
 		}
 		
@@ -125,6 +132,7 @@ class ListeControleur {
 			$post = $rq->getParsedBody() ;
 			$titre = filter_var($post['titre'], FILTER_SANITIZE_STRING) ;
 			$description = filter_var($post['desc'] , FILTER_SANITIZE_STRING);
+			$visibilite = $post['visibility'];
 
 			if(strlen($titre) < 4) {
 				// Message erreur titre
@@ -136,6 +144,11 @@ class ListeControleur {
 
 			$liste->titre = $titre;
 			$liste->description = $description;
+			$pub = 0;
+			if($visibilite = 'public'){
+				$pub = 1;
+			}
+			$liste->publique = $pub;
 			$liste->save();
 		} else {
 			// MESSAGE ERREUR LISTE 

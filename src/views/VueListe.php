@@ -27,11 +27,22 @@ class VueListe
 <form method="POST" action="$url_postEdition">
     <label>Nom de la liste :<br> <textarea rows="5" cols="33" name="titre">$nomliste</textarea></label><br>
     <label>Description de la liste :<br> <textarea rows="5" cols="33" name="desc">$descliste</textarea></label><br>
+    <label>Visibilité de la liste :<br>
+      <div>
+        <input type="radio" id="public" name="visibility" value="public">
+        <label for="public">Publique</label>
+      </div>
+      <div>
+        <input type="radio" id="private" name="visibility" value="private" checked>
+        <label for="private">Privée</label>
+      </div>
+    </label><br>
 	<button type="submit">Modifier</button>
 </form>	
 FIN;
     return $html;
   }
+  
 
   private function formulaireCreation(): string
   {
