@@ -59,12 +59,20 @@ FIN;
 
     // L'affichage
     $html = <<<FIN
-<form method="POST" action="$url_postCreation">
-  <label>Nom de la liste :<br> <textarea rows="5" cols="33" name="titre"></textarea></label><br>
-  <label>Description de la liste :<br> <textarea rows="5" cols="33" name="desc"></textarea></label><br>
-  <label>Description de la liste :<br> <input type="date" name="date" required></label><br>
-<button type="submit">Créer</button>
-</form>	
+    <div class="container-fluid bg-secondary bg-gradient" style="height: 100px">
+    <span class="container-fluid align-middle">
+        <h1 class="text-white fs-1 align-middle ps-3">Cr&eacute;er une liste</h1>
+    </div>
+    </div>
+    <div style="margin-left: 3%;">
+    <form method="POST" action="$url_postCreation">
+        <label><br><h5>Nom de la liste :</h5> <textarea rows="1" cols="33" name="titre" class="form-control"></textarea></label><br>
+        <label><br><h5>Description de la liste :</h5> <textarea rows="5" cols="55" class="form-control" name="desc"></textarea></label><br>
+        <label><br><h5>Date limite :</h5> <input type="date" name="date" class="form-control" required></label><br><br><br>
+      <button type="submit" class="btn btn-success" style="padding-left: 50px; padding-right: 50px;">Cr&eacute;er</button>
+      <button type="button" class="btn btn-outline-danger" style="padding-left: 50px; padding-right: 50px;">Retour</button>
+    </form>	
+</div>
 FIN;
     return $html;
   }
