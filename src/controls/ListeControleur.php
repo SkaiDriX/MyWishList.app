@@ -7,6 +7,7 @@ use \mywishlist\models\Liste as Liste;
 use \mywishlist\views\VueListe as VueListe;
 
 use DateTime;
+use mywishlist\models\ListeMessage;
 
 class ListeControleur {
 	private $app;
@@ -68,7 +69,12 @@ class ListeControleur {
 		$liste->save();
 
 		// Création du cookie
-		//ICI
+		if (!isset($_COOKIE['createdListe'])) {
+			$cookie = $privateToken;
+		} else {
+			$cookie = unserialize ($_COOKIE['createdListe']).';'.$privateToken;
+		}
+		setcookie("createdListe", serialize ($cookie),time() + 60*60*24*365*10, "/" ) ;
 
 		// Redirection vers la page d'édition de la liste
 		$url_editListe = $this->app->router->pathFor('edition_liste', [
@@ -93,9 +99,26 @@ class ListeControleur {
 			$this->app->flash->addMessage('Alerte', 'La liste n\'existe pas !');
 			return $rs->withRedirect($this->app->router->pathFor('accueil')); 
 		} 
-		
+
+		$data['messages'] = $liste->messages()->toArray();
 		$data['liste'] = $liste;
-		$data['isOwner'] = 1; // ICI A MODIFIER EN FONCTION DU COOKIE
+
+		// On regarde si l'utilisateur a déjà un pseudo
+		$data['identite'] = "";
+		if (isset($_COOKIE['username'])) {
+			$data['identite'] = unserialize($_COOKIE['username']);
+		}
+		
+		// On regarde si l'utilisateur est le créateur de la liste
+		$data['isOwner'] = 0;
+
+		if (isset($_COOKIE['createdListe'])) {
+			$listeTable = unserialize($_COOKIE['createdListe']);
+			$listeTable = explode(";", $listeTable);
+			if (in_array($liste->token_edit, $listeTable)) {
+				$data['isOwner'] = 1;
+			}
+		}
 
 		$vue = new VueListe($data, $this->app ) ;
 		$rs->getBody()->write($vue->render(3)) ;
@@ -184,10 +207,40 @@ class ListeControleur {
         return $rs->withRedirect($this->app->router->pathFor('edition_liste',[ 'tokenPublic' => $tokenPublic, 'tokenPrivate' => $tokenPrivate])); 
 	}
 
-	/*public function addMessage(Request $rq, Response $rs, $args) {
-		// Ajout d'un message
-		return $rs;
-	}	*/	
+	public function addMessage(Request $rq, Response $rs, $args) {
+		$tokenPublic = $args['tokenPublic'];
+
+		$liste = Liste::where ('token', '=', $tokenPublic)->first();
+
+		if(is_null($liste)){  
+			$this->app->flash->addMessage('Alerte', 'La liste n\'existe pas !');
+			return $rs->withRedirect($this->app->router->pathFor('accueil')); 
+		} 
+
+		$post = $rq->getParsedBody() ;
+		$message = filter_var($post['message'], FILTER_SANITIZE_STRING) ;
+		$identite = filter_var($post['identite'] , FILTER_SANITIZE_STRING);
+
+		if(strlen($message) < 10) {
+			$this->app->flash->addMessage('Alerte', 'Le message doit au moins faire 10 caractères !');
+		} else if(strlen($identite) < 5) {
+			$this->app->flash->addMessage('Alerte', 'Votre pseudo doit faire au moins 5 caractères !');
+		}  else {
+			$listeMessage = new ListeMessage();
+			$listeMessage->liste_id = $liste->id;
+			$listeMessage->nom = $identite;
+			$listeMessage->message = $message;
+			$listeMessage->date = new DateTime();
+			$listeMessage->save();
+
+			// Création cookie identité
+			setcookie("username", serialize ($identite),time() + 60*60*24*365*10, "/" ) ;
+	
+			$this->app->flash->addMessage('Ok', 'Le message a été ajouté.');
+		}
+
+		return $rs->withRedirect($this->app->router->pathFor('affichage_liste',[ 'tokenPublic' => $tokenPublic,])); 
+	}		
 }
 
 ?>

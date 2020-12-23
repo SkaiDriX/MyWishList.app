@@ -23,6 +23,13 @@ class Liste extends \Illuminate\Database\Eloquent\Model{
     public function isExpired() {
         return (new DateTime($this->expiration) < new DateTime());
     }
+
+    /**
+     * Méthode qui permet de récupérer la liste des messages associés à la liste
+     */
+    public function messages() {
+        return $this->hasMany('mywishlist\models\ListeMessage', 'liste_id', 'id')->get()->sortByDesc('date')->sortByDesc('id'); // on trie par date d'expiration et par ID
+    }
 }
 
 ?>

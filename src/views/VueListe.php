@@ -110,6 +110,26 @@ class VueListe extends Vue
         </form>
       </div>
     </div>
+
+    <div class="card my-4">
+      <h5 class="card-header">Objets</h5>
+      <div class="card-body" style="overflow-y:scroll; max-height:400px;">
+        <ul class="list-group">
+          <li class="list-group-item">
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                <span class="badge rounded-pill bg-success">Non réservé</span>
+                <span>Titre de l'objet</span>
+              </div>
+              <div>
+                <a class="btn btn-success">Éditer</a>
+                <a class="btn btn-danger">Supprimer</a>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
   </div>
   
   <div class="col-md-5">
@@ -194,6 +214,31 @@ FIN;
   /* MÉTHODE(S) POUR LA PARTIE AFFICHAGE DE LISTE */
   /*-------------------------------------------------------------------------------------------*/
 
+
+  private function getMessages() : string {
+    $html = "";
+
+    foreach($this->data['messages'] as $m) {
+      $date = date('d F Y', strtotime($m['date']));
+      $message = $m['message'];
+      $nom = $m['nom'];
+
+      $content = <<<FIN
+      <li class="list-group-item">
+      <div class="d-flex justify-content-between align-items-center">
+        <span style="font-weight:bold;">$nom</span>
+        <small class="text-secondary" style="font-size:0.7em;">$date</small>
+      </div>
+      <div style="font-size:0.7em;">$message</div>
+    </li>      
+FIN;
+
+      $html .= $content;
+    }
+
+    return $html;
+  }
+
   private function voirListe(): string
   {
     // Les variables requises
@@ -204,6 +249,12 @@ FIN;
     $expirationDate = $liste->expiration;
     $auteur = "Anonyme";
     $isCreateur = $this->data['isOwner'];
+    $identite = $this->data['identite'];
+    $listeMessages = $this->getMessages();
+
+    $url_message = $this->container->router->pathFor('add_message_post', [
+      'tokenPublic' => $liste->token
+    ]); 
 
     // Le bouton de modification de liste
     $btn = "";
@@ -218,7 +269,7 @@ FIN;
           <a href="' . $url_edition . '" class="btn btn-outline-danger">Modifier la liste</a>
         </div>';
     }
-
+  
     // L'affichage
     $html = <<<FIN
 
@@ -316,60 +367,19 @@ FIN;
       <h5 class="card-header">Messages</h5>
       <div class="card-body" style="overflow-y: scroll; max-height: 350px;">
         <ul class="list-group">
-          <li class="list-group-item">
-            <div class="d-flex justify-content-between align-items-center">
-              <span style="font-weight:bold;">Marie</span>
-              <small class="text-secondary" style="font-size:0.7em;">Hier</small>
-            </div>
-            <div style="font-size:0.7em;">AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA</div>
-          </li>
-          <li class="list-group-item">
-            <div class="d-flex justify-content-between align-items-center">
-              <span style="font-weight:bold;">Marie</span>
-              <small class="text-secondary" style="font-size:0.7em;">Hier</small>
-            </div>
-            <div style="font-size:0.7em;">AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA</div>
-          </li>
-          <li class="list-group-item">
-            <div class="d-flex justify-content-between align-items-center">
-              <span style="font-weight:bold;">Marie</span>
-              <small class="text-secondary" style="font-size:0.7em;">Hier</small>
-            </div>
-            <div style="font-size:0.7em;">AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA</div>
-          </li>
-          <li class="list-group-item">
-            <div class="d-flex justify-content-between align-items-center">
-              <span style="font-weight:bold;">Marie</span>
-              <small class="text-secondary" style="font-size:0.7em;">Hier</small>
-            </div>
-            <div style="font-size:0.7em;">AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA</div>
-          </li>
-          <li class="list-group-item">
-          <div class="d-flex justify-content-between align-items-center">
-            <span style="font-weight:bold;">Marie</span>
-            <small class="text-secondary" style="font-size:0.7em;">Hier</small>
-          </div>
-          <div style="font-size:0.7em;">AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA</div>
-        </li>
-        <li class="list-group-item">
-          <div class="d-flex justify-content-between align-items-center">
-            <span style="font-weight:bold;">Marie</span>
-            <small class="text-secondary" style="font-size:0.7em;">Hier</small>
-          </div>
-          <div style="font-size:0.7em;">AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA</div>
-        </li>
-      </ul>
+          $listeMessages
+        </ul>
     </div>
   </div>
 
   <div class="card my-4">
     <h5 class="card-header">Ajout d'un message</h5>
     <div class="card-body">
-      <form method="POST" action="#">
+      <form method="POST" action="$url_message">
         <textarea rows="4" cols="55" class="form-control" name="message" ></textarea>
         <div class="input-group mb-3 mt-4">
-          <span class="input-group-text">Identité</span>
-          <input type="text" class="form-control">
+          <span class="input-group-text">Pseudo</span>
+          <input type="text" name="identite" class="form-control" value="$identite">
         </div>
         <div class="d-flex justify-content-center">
           <button class="btn btn-success">Ajouter le message</button>

@@ -43,7 +43,7 @@ Pour terminer, veuillez importer le fichier **base.sql** (présent dans le répe
 - [ ] *Afficher un item d'une liste* (Matthieu, Victor)
 - [ ] *Réserver un item* (Matthieu, Victor)
 - [ ] *Ajouter un message avec sa réservation* (Matthieu, Victor)
-- [ ] *Ajouter un message sur une liste* (Sangoan, Yoan)
+- [X] *Ajouter un message sur une liste* (Sangoan, Yoan)
 
 ### Créateur
 - [X] *Créer une liste* (Sangoan, Yoan)

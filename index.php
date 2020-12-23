@@ -45,7 +45,7 @@ $app->get('/liste/{tokenPublic:[a-zA-Z0-9]+}', ListeControleur::class.':getListe
 $app->get('/liste/{tokenPublic:[a-zA-Z0-9]+}/edit/{tokenPrivate:[a-zA-Z0-9]+}', ListeControleur::class.':editListe')->setName('edition_liste');
 $app->post('/liste/{tokenPublic:[a-zA-Z0-9]+}/edit/{tokenPrivate:[a-zA-Z0-9]+}', ListeControleur::class.':updateListe')->setName('edition_liste_post');
 
-$app->post('/liste/{tokenPublic}/addMessage', ListeControleur::class.':addMessage')->setName('add_message_post');
+$app->post('/liste/{tokenPublic:[a-zA-Z0-9]+}/addMessage', ListeControleur::class.':addMessage')->setName('add_message_post');
 
 // Lancement de l'application
 $app->run();
