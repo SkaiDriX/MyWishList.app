@@ -39,22 +39,22 @@ Pour terminer, veuillez importer le fichier **base.sql** (présent dans le répe
 
 ### Participant
 
-- [ ] *Afficher une liste de souhaits* (Sangoan, Yoan)
-- [ ] *Afficher un item d'une liste* (Sangoan, Yoan)
+- [X] *Afficher une liste de souhaits* (Sangoan, Yoan)
+- [ ] *Afficher un item d'une liste* (Matthieu, Victor)
 - [ ] *Réserver un item* (Matthieu, Victor)
 - [ ] *Ajouter un message avec sa réservation* (Matthieu, Victor)
 - [ ] *Ajouter un message sur une liste* (Sangoan, Yoan)
 
 ### Créateur
-- [ ] *Créer une liste* (Sangoan, Yoan)
-- [ ] *Modifier les informations générales d'une de ses listes* (Sangoan, Yoan)
+- [X] *Créer une liste* (Sangoan, Yoan)
+- [X] *Modifier les informations générales d'une de ses listes* (Sangoan, Yoan)
 - [ ] *Ajouter des items* (Matthieu, Victor)
 - [ ] *Modifier un item*  (Matthieu, Victor)
 - [ ] *Supprimer un item* (Matthieu, Victor)
 - [ ] *Rajouter une image à un item* (Matthieu, Victor)
 - [ ] *Modifier une image à un item* (Matthieu, Victor)
 - [ ] *Supprimer une image d'un item* (Matthieu, Victor)
-- [ ] *Partager une liste* (Sangoan, Yoan)
+- [X] *Partager une liste* (Sangoan, Yoan)
 - [ ] *Consulter les réservations d'une de ses listes avant échéance* (Sangoan, Yoan)
 - [ ] *Consulter les réservations et messages d'une de ses listes après échéance* (Sangoan, Yoan)
 
@@ -62,8 +62,8 @@ Pour terminer, veuillez importer le fichier **base.sql** (présent dans le répe
 - [ ] *Créer un compte* 
 - [ ] *S'authentifier* 
 - [ ] *Modifier son compte* 
-- [ ] *Rendre une liste publique* 
-- [ ] *Afficher les listes de souhaits publiques* 
+- [X] *Rendre une liste publique* (Sangoan, Yoan)
+- [X] *Afficher les listes de souhaits publiques* (Sangoan, Yoan)
 - [ ] *Créer une cagnotte sur un item*
 - [ ] *Participer à une cagnotte*
 - [ ] *Uploader une image*
