@@ -10,19 +10,18 @@ class Liste extends \Illuminate\Database\Eloquent\Model{
 
     public $timestamps = false;
 
+    /**
+     * Cette méthode permet de savoir si le token d'édition passé en paramètre est bien celui associé à la liste
+     */
     public function isEditable($tokenPrive) {
-        if($this->token_edit == $tokenPrive) {
-            return true;
-        }
-        return false;
+        return ($this->token_edit == $tokenPrive);
     }
 
+    /**
+     * Cette méthode permet de savoir si la liste est expirée ou non
+     */
     public function isExpired() {
-        if(new DateTime($this->expiration) < new DateTime()) {
-            return true;
-        }
-        
-        return false;
+        return (new DateTime($this->expiration) < new DateTime());
     }
 }
 

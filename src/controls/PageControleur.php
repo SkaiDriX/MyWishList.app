@@ -16,7 +16,8 @@ class PageControleur {
 	}
 
 	public function index(Request $rq, Response $rs, $args) {
-		$data = Liste::select('titre', 'description', 'token') -> where ('publique', '=', 1)->get()->toArray();
+		// On récupère l'ensemble des listes publiques, on passera ce tableau à la vue
+		$data = Liste::where ('publique', '=', 1)->get()->toArray();
 
 		$vue = new VuePage($data, $this->app ) ;
 		$rs->getBody()->write($vue->render()) ;
