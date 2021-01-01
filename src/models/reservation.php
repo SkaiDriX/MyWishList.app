@@ -1,9 +1,7 @@
 <?php
 namespace mywishlist\models;
 
-use DateTime;
-
-class reservation extends \Illuminate\Database\Eloquent\Model{
+class Reservation extends \Illuminate\Database\Eloquent\Model{
 
     protected $table = 'reservations';
     protected $primaryKey = 'id' ;

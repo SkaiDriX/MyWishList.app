@@ -1,8 +1,6 @@
 <?php
 namespace mywishlist\models;
 
-use DateTime;
-
 class Item extends \Illuminate\Database\Eloquent\Model{
 
     protected $table = 'item';
@@ -11,12 +9,12 @@ class Item extends \Illuminate\Database\Eloquent\Model{
     public $timestamps = false;
 
     public function reservation() {
-        return $this->hasOne(‘Reservation’, 'id_item');
+        return $this->hasOne('mywishlist\models\Reservation', 'id_item');
     }
 
     public function isReserved() {
         $res = true;
-        if ($this->reservation() == null){
+        if(is_null($this->reservation())){
             $res = false;
         }
         return $res;
