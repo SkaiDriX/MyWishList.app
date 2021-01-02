@@ -49,19 +49,19 @@ $app->post('/liste/{tokenPublic:[a-zA-Z0-9]+}/edit/{tokenPrivate:[a-zA-Z0-9]+}',
 $app->post('/liste/{tokenPublic:[a-zA-Z0-9]+}/addMessage', ListeControleur::class.':addMessage')->setName('add_message_post');
 
 
-$app->get('/liste/{tokenPublic]/item/{idItem}', ItemControleur::class.':getItem')->setName('affichage_item');
+$app->get('/liste/{tokenPublic:[a-zA-Z0-9]+}/item/{idItem:[0-9]+}', ItemControleur::class.':getItem')->setName('affichage_item');
 
-$app->post('/liste/{tokenPublic]/item/{idItem}/reserve', ItemControleur::class.':reserverItem')->setName('reservation_item');
+$app->post('/liste/{tokenPublic:[a-zA-Z0-9]+}/item/{idItem:[0-9]+}/reserve', ItemControleur::class.':reserverItem')->setName('reservation_item');
 
-$app->post('/liste/{tokenPublic}/edit/{tokenPrivate}/item/{idItem}/delete', ItemControleur::class.':deleteItem')->setName('suppression_item');
+$app->post('/liste/{tokenPublic:[a-zA-Z0-9]+}/edit/{tokenPrivate:[a-zA-Z0-9]+}/item/{idItem:[0-9]+}/delete', ItemControleur::class.':deleteItem')->setName('suppression_item');
 
-$app->get('/liste/{tokenPublic}/edit/{tokenPrivate}/item/add ', ItemControleur::class.':createItem')->setName('créer_item');
+$app->get('/liste/{tokenPublic:[a-zA-Z0-9]+}/edit/{tokenPrivate:[a-zA-Z0-9]+}/item/add', ItemControleur::class.':createItem')->setName('creer_item');
 
-$app->post('/liste/{tokenPublic}/edit/{tokenPrivate}/item/add ->', ItemControleur::class.':insertItem')->setName('créer_item_post');
+$app->post('/liste/{tokenPublic:[a-zA-Z0-9]+}/edit/{tokenPrivate:[a-zA-Z0-9]+}/item/add', ItemControleur::class.':insertItem')->setName('creer_item_post');
 
-$app->get('/liste/{tokenPublic}/edit/{tokenPrivate}/item/{idItem}/edit', ItemControleur::class.':editItem')->setName('edition_item');
+$app->get('/liste/{tokenPublic:[a-zA-Z0-9]+}/edit/{tokenPrivate:[a-zA-Z0-9]+}/item/{idItem:[0-9]+}/edit', ItemControleur::class.':editItem')->setName('edition_item');
 
-$app->post('/liste/{tokenPublic}/edit/{tokenPrivate}/item/{idItem}/edit ', ItemControleur::class.':updateItem')->setName('edition_item_post');
+$app->post('/liste/{tokenPublic:[a-zA-Z0-9]+}/edit/{tokenPrivate:[a-zA-Z0-9]+}/item/{idItem:[0-9]+}/edit ', ItemControleur::class.':updateItem')->setName('edition_item_post');
 
 // Lancement de l'application
 $app->run();

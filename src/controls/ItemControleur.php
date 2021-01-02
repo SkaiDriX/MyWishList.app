@@ -4,11 +4,11 @@ namespace mywishlist\controls;
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
 use \mywishlist\models\Liste as Liste;
-use \mywishlist\views\VueListe as VueListe;
 use \mywishlist\models\Reservation as Reservation;
+use \mywishlist\models\Item as Item;
+use \mywishlist\views\VueItem as VueItem;
 
 use DateTime;
-use mywishlist\models\ListeMessage;
 
 class ItemControleur
 {
@@ -31,15 +31,32 @@ class ItemControleur
             return $rs->withRedirect($this->app->router->pathFor('accueil'));
         }
 
-        $id = $args['id'];
-
+        $id = $args['idItem'];
         $item = Item::where(['id' => $id, 'liste_id' => $liste->id])->first();
 
         if (is_null($item)) {
             $this->app->flash->addMessage('Alerte', 'L item n\'existe pas !');
             return $rs->withRedirect( $this->app->router->pathFor('affichage_liste', ['tokenPublic' => $tokenPublic]));
         }
-        var_dump($item);
+
+        $data['public'] = $tokenPublic;
+        $data['item'] = $item;
+
+        // On récupère la réservation sur l'item si elle existe
+        $data['reserved'] = $item->isReserved(); 
+        if($data['reserved']) {
+            $data['reservation'] = $item->reservation;
+        }
+
+        // On regarde si l'utilisateur a déjà un pseudo
+		$data['identite'] = "";
+		if (isset($_COOKIE['username'])) {
+			$data['identite'] = unserialize($_COOKIE['username']);
+		}
+
+        $vue = new VueItem($data, $this->app) ;
+		$rs->getBody()->write($vue->render(3));
+
         return $rs;
     }
 
@@ -61,8 +78,11 @@ class ItemControleur
             return $rs->withRedirect($this->app->router->pathFor('affichage_liste', ['tokenPublic' => $tokenPublic]));
         }
 
-        /**affichage de la vue**/
+        $data['public'] = $tokenPublic;
+        $data['private'] = $tokenPrivate;
 
+        $vue = new VueItem($data, $this->app) ;
+		$rs->getBody()->write($vue->render(2));
         return $rs;
 
     }
@@ -85,8 +105,7 @@ class ItemControleur
             return $rs->withRedirect($this->app->router->pathFor('affichage_liste', ['tokenPublic' => $tokenPublic]));
         }
 
-        $id = $args['id'];
-
+        $id = $args['idItem'];
         $item = Item::where(['id' => $id, 'liste_id' => $liste->id])->first();
 
         if (is_null($item)) {
@@ -99,10 +118,13 @@ class ItemControleur
             return $rs->withRedirect($this->app->router->pathFor('edition_liste',[ 'tokenPublic' => $tokenPublic, 'tokenPrivate' => $tokenPrivate]));
         }
 
+        $data['public'] = $tokenPublic;
+        $data['private'] = $tokenPrivate;
+        $data['item'] = $item;
 
-        /**affichage de la vue**/
+        $vue = new VueItem($data, $this->app) ;
+		$rs->getBody()->write($vue->render(1));
         return $rs;
-
     }
 
     public function reserverItem(Request $rq, Response $rs, $args)
@@ -115,25 +137,21 @@ class ItemControleur
             $this->app->flash->addMessage('Alerte', 'La liste n\'existe pas !');
             return $rs->withRedirect($this->app->router->pathFor('accueil'));
         }  else if ($liste->isExpired()) {
-            $this->app->flash->addMessage('Alerte', 'Il n\'est pas possible de modifier une liste expirée !');
+            $this->app->flash->addMessage('Alerte', 'Il n\'est pas possible de réserver un item d\'une liste expirée !');
             return $rs->withRedirect($this->app->router->pathFor('affichage_liste', ['tokenPublic' => $tokenPublic]));
         }
 
-        $id = $args['id'];
-
+        $id = $args['idItem'];
         $item = Item::where(['id' => $id, 'liste_id' => $liste->id])->first();
 
         if (is_null($item)) {
             $this->app->flash->addMessage('Alerte', 'L item n\'existe pas !');
             return $rs->withRedirect( $this->app->router->pathFor('affichage_liste', ['tokenPublic' => $tokenPublic]));
         }
-
         if ($item->isReserved() == true) {
             $this->app->flash->addMessage('Alerte', 'L item est déjà réservé !');
             return $rs->withRedirect( $this->app->router->pathFor('affichage_liste', ['tokenPublic' => $tokenPublic]));
         }
-
-
 
         $post = $rq->getParsedBody() ;
         $message = filter_var($post['message'], FILTER_SANITIZE_STRING) ;
@@ -154,10 +172,10 @@ class ItemControleur
             // Création cookie identité
             setcookie("username", serialize ($identite),time() + 60*60*24*365*10, "/" ) ;
 
-            $this->app->flash->addMessage('Ok', 'Le message a été ajouté.');
+            $this->app->flash->addMessage('Ok', 'Vous avez réserver l\'objet !');
         }
         
-        return $rs->withRedirect( $this->app->router->pathFor('affichage_liste', ['tokenPublic' => $tokenPublic]));
+        return $rs->withRedirect( $this->app->router->pathFor('affichage_item', ['tokenPublic' => $tokenPublic, 'idItem' => $item->id]));
 
     }
 

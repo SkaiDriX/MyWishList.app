@@ -14,7 +14,7 @@ class Item extends \Illuminate\Database\Eloquent\Model{
 
     public function isReserved() {
         $res = true;
-        if(is_null($this->reservation())){
+        if(is_null($this->reservation)){
             $res = false;
         }
         return $res;
