@@ -5,11 +5,12 @@ use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
 use \mywishlist\models\Liste as Liste;
 use \mywishlist\views\VueListe as VueListe;
+use \mywishlist\models\Reservation as Reservation;
 
 use DateTime;
 use mywishlist\models\ListeMessage;
 
-class ListeControleur
+class ItemControleur
 {
 
     private $app;
@@ -36,7 +37,7 @@ class ListeControleur
 
         if (is_null($item)) {
             $this->app->flash->addMessage('Alerte', 'L item n\'existe pas !');
-            return $rs->withRedirect($this->app->router->pathFor('accueil'));
+            return $rs->withRedirect( $this->app->router->pathFor('affichage_liste', ['tokenPublic' => $tokenPublic]));
         }
         var_dump($item);
         return $rs;
@@ -90,12 +91,12 @@ class ListeControleur
 
         if (is_null($item)) {
             $this->app->flash->addMessage('Alerte', 'L item n\'existe pas !');
-            return $rs->withRedirect($this->app->router->pathFor('accueil'));
+            return $rs->withRedirect($this->app->router->pathFor('edition_liste',[ 'tokenPublic' => $tokenPublic, 'tokenPrivate' => $tokenPrivate]));
         }
 
         if ($item->isReserved() == true) {
             $this->app->flash->addMessage('Alerte', 'L item est déjà réservé !');
-            return $rs->withRedirect($this->app->router->pathFor('accueil'));
+            return $rs->withRedirect($this->app->router->pathFor('edition_liste',[ 'tokenPublic' => $tokenPublic, 'tokenPrivate' => $tokenPrivate]));
         }
 
 
@@ -124,12 +125,12 @@ class ListeControleur
 
         if (is_null($item)) {
             $this->app->flash->addMessage('Alerte', 'L item n\'existe pas !');
-            return $rs->withRedirect($this->app->router->pathFor('accueil'));
+            return $rs->withRedirect( $this->app->router->pathFor('affichage_liste', ['tokenPublic' => $tokenPublic]));
         }
 
         if ($item->isReserved() == true) {
             $this->app->flash->addMessage('Alerte', 'L item est déjà réservé !');
-            return $rs->withRedirect($this->app->router->pathFor('accueil'));
+            return $rs->withRedirect( $this->app->router->pathFor('affichage_liste', ['tokenPublic' => $tokenPublic]));
         }
 
 
@@ -155,11 +156,8 @@ class ListeControleur
 
             $this->app->flash->addMessage('Ok', 'Le message a été ajouté.');
         }
-
-
-        /**affichage de la vue**/
-
-        return $rs;
+        
+        return $rs->withRedirect( $this->app->router->pathFor('affichage_liste', ['tokenPublic' => $tokenPublic]));
 
     }
 
