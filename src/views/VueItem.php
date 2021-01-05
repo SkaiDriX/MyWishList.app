@@ -164,15 +164,15 @@ FIN;
             </div>
             <div class="form-group my-3">
               <label>URL vers une page marché</label>
-              <input type="text" class="form-control" name="titre" placeholder="URL Page produit" value="$url">
+              <input type="text" class="form-control" name="url" placeholder="URL Page produit" value="$url">
             </div>
             <div class="form-group my-3">
             <label>URL Image</label>
-            <input type="text" class="form-control" name="titre" placeholder="URL Image" value="$img">
+            <input type="text" class="form-control" name="img" placeholder="URL Image" value="$img">
           </div>
           <div class="form-group my-3">
           <label>Tarif</label>
-          <input type="text" class="form-control" name="titre" placeholder="Tarif"  value="$tarif" required>
+          <input type="text" class="form-control" name="tarif" placeholder="Tarif"  value="$tarif" required>
         </div>
             <div class="form-group d-flex justify-content-around">
               <button type="submit" class="btn btn-success">Modifier</button>
@@ -218,15 +218,15 @@ FIN;
             </div>
             <div class="form-group my-3">
               <label>URL vers une page marché</label>
-              <input type="text" class="form-control" name="titre" placeholder="URL Page produit">
+              <input type="text" class="form-control" name="url" placeholder="URL Page produit">
             </div>
             <div class="form-group my-3">
             <label>URL Image</label>
-            <input type="text" class="form-control" name="titre" placeholder="URL Image">
+            <input type="text" class="form-control" name="img" placeholder="URL Image">
           </div>
           <div class="form-group my-3">
           <label>Tarif</label>
-          <input type="text" class="form-control" name="titre" placeholder="Tarif" required>
+          <input type="text" class="form-control" name="tarif" placeholder="Tarif" required>
         </div>
             <div class="form-group d-flex justify-content-around">
               <button type="submit" class="btn btn-success">Créer</button>
