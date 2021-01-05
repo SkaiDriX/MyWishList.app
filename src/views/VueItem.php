@@ -134,7 +134,7 @@ FIN;
   private function formulaireEdition(): string
   {
     // Les variables requises
-    $url_postCreation = $this->container->router->pathFor('creer_item_post', ['tokenPublic' => $this->data['public'], 'tokenPrivate' => $this->data['private']]);
+    $url_postEdition = $this->container->router->pathFor('edition_item_post', ['tokenPublic' => $this->data['public'], 'tokenPrivate' => $this->data['private'], 'idItem' => $this->data['item']->id ]);
 
     $url_edition = $this->container->router->pathFor('edition_liste', [
       'tokenPublic' => $this->data['public'],
@@ -153,7 +153,7 @@ FIN;
       <h1 class="my-4 text-center">Édition d'un item</h1>
       <div class="card">
         <div class="card-body">
-          <form role="form" method="POST" action="$url_postCreation">
+          <form role="form" method="POST" action="$url_postEdition">
             <div class="form-group my-3">
               <label>Titre</label>
               <input type="text" class="form-control" name="titre" placeholder="Titre" value="$nom" required>
@@ -172,7 +172,7 @@ FIN;
           </div>
           <div class="form-group my-3">
           <label>Tarif</label>
-          <input type="text" class="form-control" name="tarif" placeholder="Tarif"  value="$tarif" required>
+          <input type="number" class="form-control" name="tarif" placeholder="Tarif"  value="$tarif" required>
         </div>
             <div class="form-group d-flex justify-content-around">
               <button type="submit" class="btn btn-success">Modifier</button>
@@ -226,7 +226,7 @@ FIN;
           </div>
           <div class="form-group my-3">
           <label>Tarif</label>
-          <input type="text" class="form-control" name="tarif" placeholder="Tarif" required>
+          <input type="number" class="form-control" name="tarif" placeholder="Tarif" required>
         </div>
             <div class="form-group d-flex justify-content-around">
               <button type="submit" class="btn btn-success">Créer</button>
