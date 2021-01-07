@@ -81,6 +81,50 @@ FIN;
     return $html;
   }
 
+  private function affichageItems () {
+    $html = "";
+
+    foreach($this->data['items'] as $i) {
+      $titre = $i->nom;
+      
+      $url_reserve = $this->container->router->pathFor('affichage_item', [
+        'tokenPublic' => $this->data['liste']->token,
+        'idItem' => $i->id
+      ]);
+
+      $url_delete = $this->container->router->pathFor('suppression_item', [
+        'tokenPublic' => $this->data['liste']->token,
+        'tokenPrivate' => $this->data['liste']->token_edit,
+        'idItem' => $i->id
+      ]);
+
+      if($i->isReserved()) {
+        $etat = '<span class="badge rounded-pill bg-danger">Réservé</span>';
+        $btn = '';
+      } else {
+        $etat = '<span class="badge rounded-pill bg-success">Non réservé</span>';
+        $btn = '<div>
+        <a class="btn btn-primary" href="'.$url_reserve.'">Voir</a>
+        </div>';
+      }
+
+      $html = <<<FIN
+      $html 
+      <li class="list-group-item">
+      <div class="d-flex justify-content-between align-items-center">
+        <div>
+          $etat
+          <span>$titre</span>
+        </div>
+        $btn
+      </div>
+    </li>
+FIN;
+    }
+
+    return $html;
+  }
+
   private function formulaireEdition(): string
   {
     // Les variables requises
@@ -314,6 +358,7 @@ FIN;
           <a href="' . $url_edition . '" class="btn btn-outline-danger">Modifier la liste</a>
         </div>';
     }
+    $items = $this->affichageItems();
   
     // L'affichage
     $html = <<<FIN
@@ -337,72 +382,7 @@ FIN;
       <h5 class="card-header">Objets</h5>
       <div class="card-body" style="overflow-y:scroll; max-height:400px;">
         <ul class="list-group">
-          <li class="list-group-item">
-            <div class="d-flex justify-content-between align-items-center">
-              <div>
-                <span class="badge rounded-pill bg-success">Non réservé</span>
-                <span>Titre de l'objet</span>
-              </div>
-              <div>
-                <button class="btn btn-secondary">Voir</button>
-              </div>
-            </div>
-          </li>
-          <li class="list-group-item">
-            <div class="d-flex justify-content-between align-items-center">
-              <div>
-                <span class="badge rounded-pill bg-danger">Réservé</span>
-                <span>Titre de l'objet 2</span>
-              </div>
-              <div>
-                <button class="btn btn-secondary">Voir</button>
-              </div>
-            </div>
-          </li>
-          <li class="list-group-item">
-            <div class="d-flex justify-content-between align-items-center">
-              <div>
-                <span class="badge rounded-pill bg-success">Non réservé</span>
-                <span>Titre de l'objet</span>
-              </div>
-              <div>
-                <button class="btn btn-secondary">Voir</button>
-              </div>
-            </div>
-          </li>
-          <li class="list-group-item">
-            <div class="d-flex justify-content-between align-items-center">
-              <div>
-                <span class="badge rounded-pill bg-danger">Réservé</span>
-                <span>Titre de l'objet 2</span>
-              </div>
-              <div>
-                <button class="btn btn-secondary">Voir</button>
-              </div>
-            </div>
-          </li>
-          <li class="list-group-item">
-            <div class="d-flex justify-content-between align-items-center">
-              <div>
-                <span class="badge rounded-pill bg-success">Non réservé</span>
-                <span>Titre de l'objet</span>
-              </div>
-              <div>
-                <button class="btn btn-secondary">Voir</button>
-              </div>
-            </div>
-          </li>
-          <li class="list-group-item">
-            <div class="d-flex justify-content-between align-items-center">
-              <div>
-                <span class="badge rounded-pill bg-danger">Réservé</span>
-                <span>Titre de l'objet 2</span>
-              </div>
-              <div>
-                <button class="btn btn-secondary">Voir</button>
-              </div>
-            </div>
-          </li>
+          $items
         </ul>
       </div>
     </div>

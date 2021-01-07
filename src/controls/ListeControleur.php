@@ -119,6 +119,7 @@ class ListeControleur {
 				$data['isOwner'] = 1;
 			}
 		}
+		$data['items'] = $liste->items;
 
 		$vue = new VueListe($data, $this->app ) ;
 		$rs->getBody()->write($vue->render(3)) ;
