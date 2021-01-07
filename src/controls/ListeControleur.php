@@ -152,6 +152,7 @@ class ListeControleur {
 		
 		$data['clePublique'] = $tokenPublic;
 		$data['clePrive'] = $tokenPrivate;
+		$data['items'] = $liste->items;
 		$data['liste'] = $liste;
 		$data['url'] = $rq->getUri()->getBaseUrl();
 

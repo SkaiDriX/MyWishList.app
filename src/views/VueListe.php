@@ -35,6 +35,52 @@ class VueListe extends Vue
   /* MÉTHODE(S) POUR LA PARTIE ÉDITION */
   /*-------------------------------------------------------------------------------------------*/
 
+  private function getItems() {
+    $html = "";
+
+    foreach($this->data['items'] as $i) {
+      $titre = $i->nom;
+      
+      $url_edit = $this->container->router->pathFor('edition_item', [
+        'tokenPublic' => $this->data['liste']->token,
+        'tokenPrivate' => $this->data['liste']->token_edit,
+        'idItem' => $i->id
+      ]);
+
+      $url_delete = $this->container->router->pathFor('suppression_item', [
+        'tokenPublic' => $this->data['liste']->token,
+        'tokenPrivate' => $this->data['liste']->token_edit,
+        'idItem' => $i->id
+      ]);
+
+      if($i->isReserved()) {
+        $etat = '<span class="badge rounded-pill bg-danger">Réservé</span>';
+        $btn = '';
+      } else {
+        $etat = '<span class="badge rounded-pill bg-success">Non réservé</span>';
+        $btn = '<div>
+        <a class="btn btn-success" href="'.$url_edit.'">Éditer</a>
+        <a class="btn btn-danger" href="'.$url_delete.'">Supprimer</a>
+        </div>';
+      }
+
+      $html = <<<FIN
+      $html 
+      <li class="list-group-item">
+      <div class="d-flex justify-content-between align-items-center">
+        <div>
+          $etat
+          <span>$titre</span>
+        </div>
+        $btn
+      </div>
+    </li>
+FIN;
+    }
+
+    return $html;
+  }
+
   private function formulaireEdition(): string
   {
     // Les variables requises
@@ -58,6 +104,11 @@ class VueListe extends Vue
       'tokenPrivate' => $edit,
     ]);
 
+    $url_addItem = $this->container->router->pathFor('creer_item', [
+      'tokenPublic' => $token,
+      'tokenPrivate' => $edit,
+    ]);
+
 
     $statusPublique = "";
     $statusPrive = "";
@@ -67,6 +118,8 @@ class VueListe extends Vue
     } else {
       $statusPublique = "checked";
     }
+
+    $items = $this->getItems();
 
     // L'affichage
     $html = <<<FIN
@@ -112,21 +165,13 @@ class VueListe extends Vue
     </div>
 
     <div class="card my-4">
-      <h5 class="card-header">Objets</h5>
+      <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
+      <h5 style="margin-bottom: 0;">Objets</h5>
+      <a class="btn btn-success" style="font-size: 0.8em;" href="$url_addItem">Ajouter</a>
+      </div>
       <div class="card-body" style="overflow-y:scroll; max-height:400px;">
         <ul class="list-group">
-          <li class="list-group-item">
-            <div class="d-flex justify-content-between align-items-center">
-              <div>
-                <span class="badge rounded-pill bg-success">Non réservé</span>
-                <span>Titre de l'objet</span>
-              </div>
-              <div>
-                <a class="btn btn-success">Éditer</a>
-                <a class="btn btn-danger">Supprimer</a>
-              </div>
-            </div>
-          </li>
+          $items
         </ul>
       </div>
     </div>
