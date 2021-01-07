@@ -81,50 +81,6 @@ FIN;
     return $html;
   }
 
-  private function affichageItems () {
-    $html = "";
-
-    foreach($this->data['items'] as $i) {
-      $titre = $i->nom;
-      
-      $url_reserve = $this->container->router->pathFor('affichage_item', [
-        'tokenPublic' => $this->data['liste']->token,
-        'idItem' => $i->id
-      ]);
-
-      $url_delete = $this->container->router->pathFor('suppression_item', [
-        'tokenPublic' => $this->data['liste']->token,
-        'tokenPrivate' => $this->data['liste']->token_edit,
-        'idItem' => $i->id
-      ]);
-
-      if($i->isReserved()) {
-        $etat = '<span class="badge rounded-pill bg-danger">Réservé</span>';
-        $btn = '';
-      } else {
-        $etat = '<span class="badge rounded-pill bg-success">Non réservé</span>';
-        $btn = '<div>
-        <a class="btn btn-primary" href="'.$url_reserve.'">Voir</a>
-        </div>';
-      }
-
-      $html = <<<FIN
-      $html 
-      <li class="list-group-item">
-      <div class="d-flex justify-content-between align-items-center">
-        <div>
-          $etat
-          <span>$titre</span>
-        </div>
-        $btn
-      </div>
-    </li>
-FIN;
-    }
-
-    return $html;
-  }
-
   private function formulaireEdition(): string
   {
     // Les variables requises
@@ -302,7 +258,42 @@ FIN;
   /*-------------------------------------------------------------------------------------------*/
   /* MÉTHODE(S) POUR LA PARTIE AFFICHAGE DE LISTE */
   /*-------------------------------------------------------------------------------------------*/
+  
+  private function affichageItems () {
+    $html = "";
 
+    foreach($this->data['items'] as $i) {
+      $titre = $i->nom;
+      
+      $url_item = $this->container->router->pathFor('affichage_item', [
+        'tokenPublic' => $this->data['liste']->token,
+        'idItem' => $i->id
+      ]);
+
+      if($i->isReserved()) {
+        $etat = '<span class="badge rounded-pill bg-danger">Réservé</span>';
+      } else {
+        $etat = '<span class="badge rounded-pill bg-success">Non réservé</span>';
+      }
+
+      $html = <<<FIN
+      $html 
+      <li class="list-group-item">
+      <div class="d-flex justify-content-between align-items-center">
+        <div>
+          $etat
+          <span>$titre</span>
+        </div>
+        <div>
+			<a class="btn btn-primary" href="$url_item">Voir</a>
+        </div>
+      </div>
+    </li>
+FIN;
+    }
+
+    return $html;
+  }
 
   private function getMessages() : string {
     $html = "";
