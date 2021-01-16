@@ -155,7 +155,7 @@ class ListeControleur {
 		$data['clePrive'] = $tokenPrivate;
 		$data['items'] = $liste->items;
 		$data['liste'] = $liste;
-		$data['url'] = $rq->getUri()->getBaseUrl();
+		$data['url'] = $_SERVER['SERVER_NAME'];
 
 		$vue = new VueListe($data, $this->app ) ;
 		$rs->getBody()->write($vue->render(1)) ;

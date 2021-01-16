@@ -15,7 +15,7 @@ CREATE TABLE `item` (
   `descr` text DEFAULT NULL,
   `img` text DEFAULT NULL,
   `url` text DEFAULT NULL,
-  `tarif` decimal(5,2) DEFAULT NULL
+  `tarif` decimal(10,2) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
