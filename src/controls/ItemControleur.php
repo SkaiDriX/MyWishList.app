@@ -55,6 +55,17 @@ class ItemControleur
             $data['identite'] = unserialize($_COOKIE['username']);
         }
 
+        // On regarde si l'utilisateur est le créateur de la liste
+		$data['isOwner'] = 0;
+
+		if (isset($_COOKIE['createdListe'])) {
+			$listeTable = unserialize($_COOKIE['createdListe']);
+			$listeTable = explode(";", $listeTable);
+			if (in_array($liste->token_edit, $listeTable)) {
+				$data['isOwner'] = 1;
+			}
+		}
+
         $vue = new VueItem($data, $this->app);
         $rs->getBody()->write($vue->render(3));
 

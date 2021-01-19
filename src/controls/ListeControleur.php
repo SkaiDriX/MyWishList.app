@@ -120,6 +120,7 @@ class ListeControleur {
 			}
 		}
 		$data['items'] = $liste->items;
+		$data['expired'] = $liste->isExpired();
 
 		$vue = new VueListe($data, $this->app ) ;
 		$rs->getBody()->write($vue->render(3)) ;
@@ -218,6 +219,12 @@ class ListeControleur {
 			$this->app->flash->addMessage('Alerte', 'La liste n\'existe pas !');
 			return $rs->withRedirect($this->app->router->pathFor('accueil')); 
 		} 
+
+		if ($liste->isExpired()) 
+		{
+			$this->app->flash->addMessage('Alerte', 'Il n\'est pas possible d\'envoyer un message sur une liste expirée !');
+			return $rs->withRedirect( $this->app->router->pathFor('affichage_liste', ['tokenPublic' => $tokenPublic])); 
+		}
 
 		$post = $rq->getParsedBody() ;
 		$message = filter_var($post['message'], FILTER_SANITIZE_STRING) ;
