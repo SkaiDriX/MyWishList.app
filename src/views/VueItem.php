@@ -41,11 +41,18 @@ class VueItem extends Vue
       $nom = $this->data['reservation']->nom;
       $msg = $this->data['reservation']->message;
 
-      $content = <<<FIN
-      <p>L'item est déjà reservé par <b>$nom</b> !</p>
-      <p><b>Message de la réservation : </b></br>$msg</p>
+      $isCreateur = $this->data['isOwner'];
+
+      if ($isCreateur == 1 && !$this->data['expired']) {
+        $content = "En tant que créateur de la liste, vous ne pouvez pas voir qui à réservée quoi tant que la liste n'est pas expirée !";
+      } else {
+        $content = <<<FIN
+        <p>L'item est déjà reservé par <b>$nom</b> !</p>
+        <p><b>Message de la réservation : </b></br>$msg</p>
 FIN;
-    } else {
+      }
+    }
+    else {
       $url_reservation = $this->container->router->pathFor('reservation_item', [
         'tokenPublic' => $this->data['public'],
         'idItem' => $this->data['item']->id

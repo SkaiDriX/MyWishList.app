@@ -64,7 +64,9 @@ class ItemControleur
 			if (in_array($liste->token_edit, $listeTable)) {
 				$data['isOwner'] = 1;
 			}
-		}
+        }
+        
+        $data['expired'] = $liste->isExpired();
 
         $vue = new VueItem($data, $this->app);
         $rs->getBody()->write($vue->render(3));
@@ -264,8 +266,8 @@ class ItemControleur
 		} else if(strlen($desc) < 5) {
             $this->app->flash->addMessage('Alerte', 'La description doit au moins faire 5 caractères !');
             return $rs->withRedirect($this->app->router->pathFor('creer_item', ['tokenPublic' => $tokenPublic, 'tokenPrivate' => $tokenPrivate]));
-        } else if($tarif <= 0) {
-            $this->app->flash->addMessage('Alerte', 'Le prix doit être supérieur à 0 euro !');
+        } else if($tarif <= 0 || $tarif >=100000) {
+            $this->app->flash->addMessage('Alerte', 'Le prix doit être supérieur à 0 euro et inférieur à 100.000 euros !');
             return $rs->withRedirect($this->app->router->pathFor('creer_item', ['tokenPublic' => $tokenPublic, 'tokenPrivate' => $tokenPrivate]));
         } 
         
@@ -331,8 +333,8 @@ class ItemControleur
 		} else if(strlen($desc) < 5) {
             $this->app->flash->addMessage('Alerte', 'La description doit au moins faire 5 caractères !');
             return $rs->withRedirect($this->app->router->pathFor('edition_item', ['tokenPublic' => $tokenPublic, 'tokenPrivate' => $tokenPrivate, 'idItem' => $id]));
-        } else if($tarif <= 0) {
-            $this->app->flash->addMessage('Alerte', 'Le prix doit être supérieur à 0 euro !');
+        } else if($tarif <= 0 || $tarif >=100000) {
+            $this->app->flash->addMessage('Alerte', 'Le prix doit être supérieur à 0 euro et inférieur à 100.000 euros !');
             return $rs->withRedirect($this->app->router->pathFor('edition_item', ['tokenPublic' => $tokenPublic, 'tokenPrivate' => $tokenPrivate, 'idItem' => $id]));
         } 
 

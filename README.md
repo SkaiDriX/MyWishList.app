@@ -14,11 +14,11 @@ Il faut maintenant créer un fichier de configuration nommé **conf.ini** dans l
 Ce fichier doit être de la forme suivante :
 
 ```bash
-driver= ?
-username= ?
-password= ?
-host= ?
-database= ?
+driver=?
+username=?
+password=?
+host=?
+database=?
 charset=utf8
 collation=utf8_unicode_ci
 ```
@@ -55,8 +55,8 @@ Pour terminer, veuillez importer le fichier **base.sql** (présent dans le répe
 - [X] *Modifier une image à un item* (Matthieu, Victor)
 - [X] *Supprimer une image d'un item* (Matthieu, Victor)
 - [X] *Partager une liste* (Sangoan, Yoan)
-- [ ] *Consulter les réservations d'une de ses listes avant échéance* (Sangoan, Yoan)
-- [ ] *Consulter les réservations et messages d'une de ses listes après échéance* (Sangoan, Yoan)
+- [X] *Consulter les réservations d'une de ses listes avant échéance* (Sangoan, Yoan)
+- [X] *Consulter les réservations et messages d'une de ses listes après échéance* (Sangoan, Yoan)
 
 ### Extensions
 - [ ] *Créer un compte* 

@@ -326,15 +326,20 @@ FIN;
 
     $titre = $liste->titre;
     $description = $liste->description;
-    $expirationDate = $liste->expiration;
     $auteur = "Anonyme";
     $isCreateur = $this->data['isOwner'];
     $identite = $this->data['identite'];
-    $listeMessages = $this->getMessages();
 
     $url_message = $this->container->router->pathFor('add_message_post', [
       'tokenPublic' => $liste->token
     ]); 
+
+    // On regarde si la liste est expirée
+    if($this->data['expired']) {
+      $expirationDate = "Expirée";
+    } else {
+      $expirationDate = $liste->expiration;
+    }
 
     // Le bouton de modification de liste
     $btn = "";
@@ -348,6 +353,14 @@ FIN;
         <div class="align-self-center mt-2">
           <a href="' . $url_edition . '" class="btn btn-outline-danger">Modifier la liste</a>
         </div>';
+
+        if($this->data['expired']) {
+          $listeMessages = $this->getMessages();
+        } else {
+          $listeMessages = "En tant que créateur de la liste, vous ne pouvez pas voir les messages tant qu'elle n'est pas expirée !";
+        }
+    } else {
+      $listeMessages = $this->getMessages();
     }
     $items = $this->affichageItems();
   
