@@ -35,6 +35,15 @@ Avec les valeurs suivantes :
 
 Pour terminer, veuillez importer le fichier **base.sql** (présent dans le répertoire conf/) dans votre base de donnée pour charger les tables requises.
 
+## Quelques informations par rapport au projet
+
+Voici quelques informations à savoir par rapport à notre fonctionnement :
+- Tout d'abord comme le sujet nous le demande, nous sommes parti du principe que le créateur d'une liste ne change jamais de navigateur et ne supprime pas ses cookies.
+- Lorsque l'on créer une liste, il faut garder le token publique ET le token d'édition, car pour accéder à la page de modification l'url est de la forme /liste/{tokenPublique}/edit/{tokenEdition}
+- Lorsqu'une liste n'est pas expirée, le créateur ne peut pas voir les messages de sa liste et ne peut pas voir les réservations sur ses items (il voit uniquement le status, pas l'identité de la personne ni le message associé)
+- Il y a aussi un système de compte utilisateur, celui-ci ne sert à rien pour le moment dans le projet mais c'était juste histoire de le mettre en place et montrer que l'on savait le faire. Lorsqu'une personne est connecté : c'est son nom d'utilisateur qui sera utilisé pour les messages sur les listes et pour les réservations. Dans le cas où la personne n'est pas connecté, alors on gére son nom d'utilisateur via un cookie.
+
+
 ## Les fonctionnalités
 
 ### Participant
@@ -59,8 +68,9 @@ Pour terminer, veuillez importer le fichier **base.sql** (présent dans le répe
 - [X] *Consulter les réservations et messages d'une de ses listes après échéance* (Sangoan, Yoan)
 
 ### Extensions
-- [ ] *Créer un compte* 
-- [ ] *S'authentifier* 
+- [X] *Créer un compte* (Sangoan) 
+- [X] *S'authentifier* (Sangoan) 
+- [X] *Se déconnecter* (Sangoan) 
 - [ ] *Modifier son compte* 
 - [X] *Rendre une liste publique* (Sangoan, Yoan)
 - [X] *Afficher les listes de souhaits publiques* (Sangoan, Yoan)
@@ -69,7 +79,7 @@ Pour terminer, veuillez importer le fichier **base.sql** (présent dans le répe
 - [ ] *Uploader une image*
 - [ ] *Créer un compte participant*
 - [ ] *Afficher la liste des créateurs*
-- [ ] *Supprimer son compte*
+- [X] *Supprimer son compte* (Sangoan) 
 - [ ] *Joindre les listes à son compte*
 
 ## Les contributeurs

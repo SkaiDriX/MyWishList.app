@@ -7,6 +7,7 @@ use \Psr\Http\Message\ResponseInterface as Response;
 use \mywishlist\models\Liste as Liste;
 use \mywishlist\models\Reservation as Reservation;
 use \mywishlist\models\Item as Item;
+use \mywishlist\models\Users as Users;
 use \mywishlist\views\VueItem as VueItem;
 
 use DateTime;
@@ -54,11 +55,20 @@ class ItemControleur
             $data['reservation'] = $item->reservation;
         }
 
-        // On regarde si l'utilisateur a déjà un pseudo
-        $data['identite'] = "";
+        // On regarde si l'utilisateur est connecté, dans le cas inverse alors on regarde le cookie identité
+		$data['identite'] = "";
+		$data['blockedIdentity'] = false;
         if (isset($_COOKIE['username'])) {
             $data['identite'] = unserialize($_COOKIE['username']);
         }
+        
+        if(isset($_SESSION['idUser']) && (!is_null(Users::where('id', '=', $_SESSION['idUser'])->first()))) {
+                $user = Users::where('id', '=', $_SESSION['idUser'])->first();
+                if(!is_null($user)) {
+					$data['identite'] = $user->username;
+					$data['blockedIdentity'] = true;
+                }
+		}
 
         // On regarde si l'utilisateur est le créateur de la liste
 		$data['isOwner'] = 0;

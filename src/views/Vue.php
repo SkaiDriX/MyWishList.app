@@ -43,6 +43,37 @@ abstract class Vue
         return $html;
     }
 
+     /**
+     * Méthode pour récuperer le menu, côté utilisateur
+     */
+    public function getUserMenu()
+    {
+        if(isset($_SESSION['idUser'])) {
+            $lienAccount = $this->container->router->pathFor('account');       
+            
+            $html = <<<FIN
+            <li class="nav-item">
+                <a class="nav-link" href="$lienAccount">Mon compte</a>
+            </li>
+FIN;
+        } else {
+            $lienRegister = $this->container->router->pathFor('inscription');
+            $lienConnect = $this->container->router->pathFor('connexion');       
+
+            $html = <<<FIN
+            <li class="nav-item">
+                <a class="nav-link" href="$lienRegister">Inscription</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="$lienConnect">Connexion</a>
+            </li>      
+FIN;
+        }
+
+
+        return $html;
+    }
+
     /**
      * Méthode de rendu
      */
@@ -52,6 +83,8 @@ abstract class Vue
         $lienAccueil = $this->container->router->pathFor('accueil');
 
         $alertContent = $this->getAlert();
+
+        $usermenu = $this->getUserMenu();
 
         $html = <<<FIN
 <!DOCTYPE html>
@@ -76,6 +109,7 @@ abstract class Vue
                         <li class="nav-item">
                            <a class="nav-link" href="$lienCreation">Créer une liste</a>
                         </li>
+                        $usermenu                       
                     </ul>
                 </div>
             </div>

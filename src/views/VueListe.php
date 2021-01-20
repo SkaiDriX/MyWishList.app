@@ -77,11 +77,9 @@ class VueListe extends Vue
       $html 
       <li class="list-group-item">
       <div class="d-flex justify-content-between align-items-center">
-        <div>
-          $etat
-          <span>$titre</span>
-        </div>
-        $btn
+        <div>$etat</div>
+        <div style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;margin:5px;">$titre</div>
+        <div>$btn</div>
       </div>
     </li>
 FIN;
@@ -304,13 +302,9 @@ FIN;
       $html 
       <li class="list-group-item">
       <div class="d-flex justify-content-between align-items-center">
-        <div>
-          $etat
-          <span>$titre</span>
-        </div>
-        <div>
-			<a class="btn btn-primary" href="$urlItem">Voir</a>
-        </div>
+        <div>$etat</div>
+        <div style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;margin:5px;">$titre</div>
+        <div><a class="btn btn-primary" href="$urlItem">Voir</a></div>
       </div>
     </li>
 FIN;
@@ -393,6 +387,13 @@ FIN;
       $listeMessages = $this->getMessages();
     }
 
+    // On regarde si l'identité est figé
+    if($this->data['blockedIdentity']) {
+      $blocked = "readonly";
+    } else {
+      $blocked = "";
+    }
+
     // Récupération des items
     $items = $this->affichageItems();
 
@@ -440,7 +441,7 @@ FIN;
         <textarea rows="4" cols="55" class="form-control" name="message" ></textarea>
         <div class="input-group mb-3 mt-4">
           <span class="input-group-text">Pseudo</span>
-          <input type="text" name="identite" class="form-control" value="$identite">
+          <input type="text" name="identite" class="form-control" value="$identite" $blocked>
         </div>
         <div class="d-flex justify-content-center">
           <button class="btn btn-success">Ajouter le message</button>

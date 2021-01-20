@@ -71,8 +71,8 @@ CREATE TABLE `reservations` (
 
 CREATE TABLE `users` (
   `id` int(11) NOT NULL COMMENT 'Primary Key',
-  `username` varchar(100) NOT NULL COMMENT 'Name',
-  `password` varchar(100) NOT NULL
+  `username` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='datatable demo table';
 
 -- --------------------------------------------------------

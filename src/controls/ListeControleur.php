@@ -5,6 +5,7 @@ use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
 use \mywishlist\models\Liste as Liste;
 use \mywishlist\views\VueListe as VueListe;
+use \mywishlist\models\Users as Users;
 
 use DateTime;
 use mywishlist\models\ListeMessage;
@@ -103,10 +104,19 @@ class ListeControleur {
 			return $rs->withRedirect($this->app->router->pathFor('accueil')); 
 		} 
 
-		// On regarde si l'utilisateur a déjà un pseudo
+        // On regarde si l'utilisateur est connecté, dans le cas inverse alors on regarde le cookie identité
 		$data['identite'] = "";
-		if (isset($_COOKIE['username'])) {
-			$data['identite'] = unserialize($_COOKIE['username']);
+		$data['blockedIdentity'] = false;
+        if (isset($_COOKIE['username'])) {
+            $data['identite'] = unserialize($_COOKIE['username']);
+        }
+        
+        if(isset($_SESSION['idUser']) && (!is_null(Users::where('id', '=', $_SESSION['idUser'])->first()))) {
+                $user = Users::where('id', '=', $_SESSION['idUser'])->first();
+                if(!is_null($user)) {
+					$data['identite'] = $user->username;
+					$data['blockedIdentity'] = true;
+                }
 		}
 		
 		// On regarde si l'utilisateur est le créateur de la liste

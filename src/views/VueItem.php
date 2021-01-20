@@ -39,7 +39,7 @@ class VueItem extends Vue
   /*-------------------------------------------------------------------------------------------*/
 
   /**
-   * Méthode qui récupère 
+   * Méthode qui récupère la liste des réservations
    */
   private function getReservation() {
     if($this->data['reserved']) {
@@ -66,12 +66,19 @@ FIN;
 
       $identite = $this->data['identite'];
 
+      // On regarde si l'identité est figé
+      if($this->data['blockedIdentity']) {
+        $blocked = "readonly";
+      } else {
+        $blocked = "";
+      }
+
       $content = <<<FIN
       <form method="POST" action="$urlReservation">
         <textarea rows="4" cols="55" class="form-control" name="message" ></textarea>
         <div class="input-group mb-3 mt-4">
           <span class="input-group-text">Pseudo</span>
-          <input type="text" name="identite" class="form-control" value="$identite">
+          <input type="text" name="identite" class="form-control" value="$identite" $blocked>
         </div>
         <div class="d-flex justify-content-center">
           <button class="btn btn-success">Réserver l'item</button>
