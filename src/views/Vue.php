@@ -17,6 +17,9 @@ abstract class Vue
         $this->container = $container;
     }
 
+    /**
+     * Méthode qui nous permet de récupèrer les alertes s'il y en à
+     */
     public function getAlert()
     {
         // On regarde si on a un message d'alerte (alerte ou succès)
@@ -40,6 +43,9 @@ abstract class Vue
         return $html;
     }
 
+    /**
+     * Méthode de rendu
+     */
     public function render($i = null)
     {
         $lienCreation = $this->container->router->pathFor('create_liste');

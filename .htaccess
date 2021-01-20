@@ -7,3 +7,6 @@ RewriteRule ^ index.php [QSA,L]
 RewriteRule ^conf(/.*|)$ - [NC,F]
 RewriteRule ^src(/.*|)$ - [NC,F]
 RewriteRule ^vendor(/.*|)$ - [NC,F]
+
+# RewriteBase webetu :
+# RewriteBase /www/brigue2u/mywishlist

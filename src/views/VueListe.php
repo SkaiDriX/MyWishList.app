@@ -10,6 +10,9 @@ class VueListe extends Vue
     parent::__construct($data, $container);
   }
 
+  /**
+   * Méthode de rendu
+   */
   public function render($i = null)
   {
 
@@ -35,35 +38,40 @@ class VueListe extends Vue
   /* MÉTHODE(S) POUR LA PARTIE ÉDITION */
   /*-------------------------------------------------------------------------------------------*/
 
+  /**
+   * Méthode pour récuperer la liste des items
+   */
   private function getItems() {
     $html = "";
 
     foreach($this->data['items'] as $i) {
       $titre = $i->nom;
       
-      $url_edit = $this->container->router->pathFor('edition_item', [
+      $urlEdit = $this->container->router->pathFor('edition_item', [
         'tokenPublic' => $this->data['liste']->token,
         'tokenPrivate' => $this->data['liste']->token_edit,
         'idItem' => $i->id
       ]);
 
-      $url_delete = $this->container->router->pathFor('suppression_item', [
+      $urlDelete = $this->container->router->pathFor('suppression_item', [
         'tokenPublic' => $this->data['liste']->token,
         'tokenPrivate' => $this->data['liste']->token_edit,
         'idItem' => $i->id
       ]);
 
+      // On regarde si l'item est réservé
       if($i->isReserved()) {
         $etat = '<span class="badge rounded-pill bg-danger">Réservé</span>';
         $btn = '';
       } else {
         $etat = '<span class="badge rounded-pill bg-success">Non réservé</span>';
         $btn = '<div>
-        <a class="btn btn-success" href="'.$url_edit.'">Éditer</a>
-        <a class="btn btn-danger" href="'.$url_delete.'">Supprimer</a>
+        <a class="btn btn-success" href="'.$urlEdit.'">Éditer</a>
+        <a class="btn btn-danger" href="'.$urlDelete.'">Supprimer</a>
         </div>';
       }
 
+      // Code HTML
       $html = <<<FIN
       $html 
       <li class="list-group-item">
@@ -81,6 +89,9 @@ FIN;
     return $html;
   }
 
+  /**
+   * Méthode d'affichage pour la page d'édition de la liste
+   */
   private function formulaireEdition(): string
   {
     // Les variables requises
@@ -90,21 +101,21 @@ FIN;
     $edit = $this->data['liste']->token_edit;
     $token = $this->data['liste']->token;
 
-    $url_liste = $this->container->router->pathFor('affichage_liste', [
+    $urlListe = $this->container->router->pathFor('affichage_liste', [
       'tokenPublic' => $token,
     ]);
 
-    $url_postEdition = $this->container->router->pathFor('edition_liste_post', [
-      'tokenPublic' => $token,
-      'tokenPrivate' => $edit,
-    ]);
-
-    $url_edition = $this->container->router->pathFor('edition_liste', [
+    $urlPostEdition = $this->container->router->pathFor('edition_liste_post', [
       'tokenPublic' => $token,
       'tokenPrivate' => $edit,
     ]);
 
-    $url_addItem = $this->container->router->pathFor('creer_item', [
+    $urlEdition = $this->container->router->pathFor('edition_liste', [
+      'tokenPublic' => $token,
+      'tokenPrivate' => $edit,
+    ]);
+
+    $urlAddItem = $this->container->router->pathFor('creer_item', [
       'tokenPublic' => $token,
       'tokenPrivate' => $edit,
     ]);
@@ -126,7 +137,7 @@ FIN;
 <div class="my-4 d-flex justify-content-center align-self-center flex-column text-center">
   <h1>$nomliste - Édition</h1>
   <div class="align-self-center mt-2">
-    <a href="$url_liste" class="btn btn-outline-secondary">Retour</a>
+    <a href="$urlListe" class="btn btn-outline-secondary">Retour</a>
   </div>
 </div>
 
@@ -135,7 +146,7 @@ FIN;
     <div class="card">
       <h5 class="card-header">Modification</h5>
       <div class="card-body">
-        <form role="form" method="POST" action="$url_postEdition">
+        <form role="form" method="POST" action="$urlPostEdition">
           <div class="form-group my-2">
             <label>Titre</label>
             <input type="text" class="form-control" name="titre" placeholder="Titre" value="$nomliste" required="">
@@ -167,7 +178,7 @@ FIN;
     <div class="card my-4">
       <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
       <h5 style="margin-bottom: 0;">Objets</h5>
-      <a class="btn btn-success" style="font-size: 0.8em;" href="$url_addItem">Ajouter</a>
+      <a class="btn btn-success" style="font-size: 0.8em;" href="$urlAddItem">Ajouter</a>
       </div>
       <div class="card-body" style="overflow-y:scroll; max-height:400px;">
         <ul class="list-group">
@@ -188,7 +199,7 @@ FIN;
         <br>
         <p>Votre lien de modification est donc :<p>
         <li class="list-group-item text-center" style="background-color: #00000059;">
-          <span>{$this->data['url']}$url_edition</span>
+          <span>{$this->data['url']}$urlEdition</span>
         </li>
       </div>
     </div>
@@ -197,7 +208,7 @@ FIN;
       <div class="card-body">
       <p style="text-align:justify;">Vous pouvez utiliser le lien suivant pour partager votre liste à vos amis :<p>
       <li class="list-group-item text-center" style="background-color: #00000059;">
-        <span>{$this->data['url']}$url_liste</span>
+        <span>{$this->data['url']}$urlListe</span>
       </li>
       </div>
     </div>
@@ -212,11 +223,14 @@ FIN;
   /* MÉTHODE(S) POUR LA PARTIE CRÉATION */
   /*-------------------------------------------------------------------------------------------*/
 
+  /**
+   * Méthode pour la vue du formulaire de création d'une liste
+   */
   private function formulaireCreation(): string
   {
     // Les variables requises
-    $url_postCreation = $this->container->router->pathFor('create_liste_post');
-    $url_accueil = $this->container->router->pathFor('accueil');
+    $urlPostCreation = $this->container->router->pathFor('create_liste_post');
+    $urlAccueil = $this->container->router->pathFor('accueil');
 
     // L'affichage
     $html = <<<FIN
@@ -224,7 +238,7 @@ FIN;
       <h1 class="my-4 text-center">Création d'une liste</h1>
       <div class="card">
         <div class="card-body">
-          <form role="form" method="POST" action="$url_postCreation">
+          <form role="form" method="POST" action="$urlPostCreation">
             <div class="form-group my-3">
               <label>Titre</label>
               <input type="text" class="form-control" name="titre" placeholder="Titre" required>
@@ -243,7 +257,7 @@ FIN;
 
             <div class="form-group d-flex justify-content-around">
               <button type="submit" class="btn btn-success">Créer</button>
-              <a class="btn btn-outline-danger" href="$url_accueil">Retour</a>
+              <a class="btn btn-outline-danger" href="$urlAccueil">Retour</a>
             </div>
           </form>
         </div>
@@ -259,13 +273,16 @@ FIN;
   /* MÉTHODE(S) POUR LA PARTIE AFFICHAGE DE LISTE */
   /*-------------------------------------------------------------------------------------------*/
   
+  /**
+   * Méthode pour l'affichage des items (côté liste)
+   */
   private function affichageItems () {
     $html = "";
 
     foreach($this->data['items'] as $i) {
       $titre = $i->nom;
       
-      $url_item = $this->container->router->pathFor('affichage_item', [
+      $urlItem = $this->container->router->pathFor('affichage_item', [
         'tokenPublic' => $this->data['liste']->token,
         'idItem' => $i->id
       ]);
@@ -285,7 +302,7 @@ FIN;
           <span>$titre</span>
         </div>
         <div>
-			<a class="btn btn-primary" href="$url_item">Voir</a>
+			<a class="btn btn-primary" href="$urlItem">Voir</a>
         </div>
       </div>
     </li>
@@ -295,6 +312,9 @@ FIN;
     return $html;
   }
 
+  /**
+   * Méthode pour récupérer les messages
+   */
   private function getMessages() : string {
     $html = "";
 
@@ -319,6 +339,9 @@ FIN;
     return $html;
   }
 
+  /**
+   * Méthode pour l'affichage de la liste
+   */
   private function voirListe(): string
   {
     // Les variables requises
@@ -330,7 +353,7 @@ FIN;
     $isCreateur = $this->data['isOwner'];
     $identite = $this->data['identite'];
 
-    $url_message = $this->container->router->pathFor('add_message_post', [
+    $urlMessage = $this->container->router->pathFor('add_message_post', [
       'tokenPublic' => $liste->token
     ]); 
 
@@ -341,29 +364,30 @@ FIN;
       $expirationDate = $liste->expiration;
     }
 
-    // Le bouton de modification de liste
+    // Affichage du bouton "modifier" si on est le créateur
     $btn = "";
     if ($isCreateur == 1) {
-      $url_edition = $this->container->router->pathFor('edition_liste', [
+      $urlEdition = $this->container->router->pathFor('edition_liste', [
         'tokenPublic' => $liste->token,
         'tokenPrivate' => $liste->token_edit,
       ]);
 
       $btn = '      
         <div class="align-self-center mt-2">
-          <a href="' . $url_edition . '" class="btn btn-outline-danger">Modifier la liste</a>
+          <a href="' . $urlEdition . '" class="btn btn-outline-danger">Modifier la liste</a>
         </div>';
-
-        if($this->data['expired']) {
-          $listeMessages = $this->getMessages();
-        } else {
-          $listeMessages = "En tant que créateur de la liste, vous ne pouvez pas voir les messages tant qu'elle n'est pas expirée !";
-        }
+    } 
+  
+    // Affichage des messages si on est le créateur ou pas
+    if ($isCreateur == 1 && !$this->data['expired']) {
+      $listeMessages = "En tant que créateur de la liste, vous ne pouvez pas voir les messages tant qu'elle n'est pas expirée !";
     } else {
       $listeMessages = $this->getMessages();
     }
+
+    // Récupération des items
     $items = $this->affichageItems();
-  
+    
     // L'affichage
     $html = <<<FIN
 
@@ -404,7 +428,7 @@ FIN;
   <div class="card my-4">
     <h5 class="card-header">Ajout d'un message</h5>
     <div class="card-body">
-      <form method="POST" action="$url_message">
+      <form method="POST" action="$urlMessage">
         <textarea rows="4" cols="55" class="form-control" name="message" ></textarea>
         <div class="input-group mb-3 mt-4">
           <span class="input-group-text">Pseudo</span>

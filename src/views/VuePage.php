@@ -13,7 +13,6 @@ class VuePage extends Vue
   {
     $this->content = $this->accueil();
     $this->titre_page = "Accueil";
-
     return parent::render();
   }
 
@@ -58,7 +57,7 @@ FIN;
   }
 
   /**
-   * O
+   * Méthode pour l'affichage de l'accueil
    */
   private function accueil(): string
   {

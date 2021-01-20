@@ -31,6 +31,8 @@ class ListeControleur {
 	 * Méthode utilisée pour la création d'une liste
 	 */
 	public function insertListe(Request $rq, Response $rs, $args) {
+		
+		// Récupération des variables
 		$post = $rq->getParsedBody() ;
 		$titre = filter_var(trim($post['titre']), FILTER_SANITIZE_STRING);
 		$description = filter_var(trim($post['desc']) , FILTER_SANITIZE_STRING);		
@@ -38,13 +40,13 @@ class ListeControleur {
 
 		// Vérifications des variables reçues
 		if(strlen($titre) < 5) {
-			$this->app->flash->addMessage('Alerte', 'Le titre doit au moins faire 5 caractères !');
+			$this->app->flash->addMessage('Alerte', "[ERREUR] Le titre de la liste doit faire au minimum 5 caractères");
 			return $rs->withRedirect($this->app->router->pathFor('create_liste')); 
 		} else if(strlen($description) < 5) {
-			$this->app->flash->addMessage('Alerte', 'La description doit au moins faire 5 caractères !');
+			$this->app->flash->addMessage('Alerte', "[ERREUR] La description de la liste doit faire au minimum 5 caractères");
 			return $rs->withRedirect($this->app->router->pathFor('create_liste')); 
 		} else if (new DateTime() > new DateTime($expiration)) {
-			$this->app->flash->addMessage('Alerte', 'La date doit être supérieur à celle actuelle !');
+			$this->app->flash->addMessage('Alerte', "[ERREUR] La date d'expiration de la liste doit être supérieur à la date actuelle");
 			return $rs->withRedirect($this->app->router->pathFor('create_liste')); 
 		} 
 
@@ -77,13 +79,13 @@ class ListeControleur {
 		setcookie("createdListe", serialize ($cookie),time() + 60*60*24*365*10, "/" ) ;
 
 		// Redirection vers la page d'édition de la liste
-		$url_editListe = $this->app->router->pathFor('edition_liste', [
+		$urlEditListe = $this->app->router->pathFor('edition_liste', [
             'tokenPublic' => $publicToken,
             'tokenPrivate' => $privateToken
 		]);	
 		
-		$this->app->flash->addMessage('Ok', 'La liste a été créé !');
-       	return $rs->withRedirect($url_editListe); 
+		$this->app->flash->addMessage('Ok', "[SUCCÈS] La liste a été créée");
+       	return $rs->withRedirect($urlEditListe); 
 	}	
 
 
@@ -93,15 +95,13 @@ class ListeControleur {
 	public function getListe(Request $rq, Response $rs, $args) {
 		
 		$tokenPublic = $args['tokenPublic'];
+		
+		// Vérification que la liste existe
 		$liste = Liste::where('token', '=', $tokenPublic)->first();
-
 		if(is_null($liste)){  
-			$this->app->flash->addMessage('Alerte', 'La liste n\'existe pas !');
+			$this->app->flash->addMessage('Alerte', "[ERREUR] La liste n'existe pas");
 			return $rs->withRedirect($this->app->router->pathFor('accueil')); 
 		} 
-
-		$data['messages'] = $liste->messages()->toArray();
-		$data['liste'] = $liste;
 
 		// On regarde si l'utilisateur a déjà un pseudo
 		$data['identite'] = "";
@@ -119,6 +119,9 @@ class ListeControleur {
 				$data['isOwner'] = 1;
 			}
 		}
+
+		$data['messages'] = $liste->messages()->toArray();
+		$data['liste'] = $liste;
 		$data['items'] = $liste->items;
 		$data['expired'] = $liste->isExpired();
 
@@ -135,22 +138,24 @@ class ListeControleur {
 		$tokenPublic = $args['tokenPublic'];
 		$tokenPrivate = $args['tokenPrivate'];
 		
+		// Vérification que la liste existe
 		$liste = Liste::where('token', '=', $tokenPublic)->first();
-
 		if(is_null($liste)){  
-			$this->app->flash->addMessage('Alerte', 'La liste n\'existe pas !');
+			$this->app->flash->addMessage('Alerte', "[ERREUR] La liste n'existe pas");
 			return $rs->withRedirect($this->app->router->pathFor('accueil')); 
 		} 
-		else if (!$liste->isEditable($tokenPrivate)) 
-		{
-			$this->app->flash->addMessage('Alerte', 'Le token de modification est invalide !');
-			return $rs->withRedirect( $this->app->router->pathFor('affichage_liste', ['tokenPublic' => $tokenPublic])); 
-		} 
-		else if ($liste->isExpired()) 
-		{
-			$this->app->flash->addMessage('Alerte', 'Il n\'est pas possible de modifier une liste expirée !');
-			return $rs->withRedirect( $this->app->router->pathFor('affichage_liste', ['tokenPublic' => $tokenPublic])); 
-		}
+
+        // Vérification que le token d'édition est correct
+        if (!$liste->isEditable($tokenPrivate)) {
+            $this->app->flash->addMessage('Alerte', "[ERREUR] Le token de modification n'est pas valide");
+            return $rs->withRedirect($this->app->router->pathFor('affichage_liste', ['tokenPublic' => $tokenPublic]));
+        } 
+
+        // Vérification que la liste n'est pas expirée
+        if ($liste->isExpired()) {
+            $this->app->flash->addMessage('Alerte', "[ERREUR] Impossible de modifier une liste expirée");
+            return $rs->withRedirect($this->app->router->pathFor('affichage_liste', ['tokenPublic' => $tokenPublic]));
+        }
 		
 		$data['clePublique'] = $tokenPublic;
 		$data['clePrive'] = $tokenPrivate;
@@ -172,68 +177,75 @@ class ListeControleur {
 		$tokenPublic = $args['tokenPublic'];
 		$tokenPrivate = $args['tokenPrivate'];	
 
-		$liste = Liste::where ('token', '=', $tokenPublic)->first();
-
+		// Vérification que la liste existe
+		$liste = Liste::where('token', '=', $tokenPublic)->first();
 		if(is_null($liste)){  
-			$this->app->flash->addMessage('Alerte', 'La liste n\'existe pas !');
+			$this->app->flash->addMessage('Alerte', "[ERREUR] La liste n'existe pas");
 			return $rs->withRedirect($this->app->router->pathFor('accueil')); 
 		} 
-		else if (!$liste->isEditable($tokenPrivate)) 
-		{
-			$this->app->flash->addMessage('Alerte', 'Le token de modification est invalide !');
-			return $rs->withRedirect( $this->app->router->pathFor('affichage_liste', ['tokenPublic' => $tokenPublic])); 
-		} 
-		else if ($liste->isExpired()) 
-		{
-			$this->app->flash->addMessage('Alerte', 'Il n\'est pas possible de modifier une liste expirée !');
-			return $rs->withRedirect( $this->app->router->pathFor('affichage_liste', ['tokenPublic' => $tokenPublic])); 
-		}
 
+        // Vérification que le token d'édition est correct
+        if (!$liste->isEditable($tokenPrivate)) {
+            $this->app->flash->addMessage('Alerte', "[ERREUR] Le token de modification n'est pas valide");
+            return $rs->withRedirect($this->app->router->pathFor('affichage_liste', ['tokenPublic' => $tokenPublic]));
+        } 
+
+        // Vérification que la liste n'est pas expirée
+        if ($liste->isExpired()) {
+            $this->app->flash->addMessage('Alerte', "[ERREUR] Impossible de modifier une liste expirée");
+            return $rs->withRedirect($this->app->router->pathFor('affichage_liste', ['tokenPublic' => $tokenPublic]));
+        }
+
+		// Récupération des variables
 		$post = $rq->getParsedBody() ;
 		$titre = filter_var($post['titre'], FILTER_SANITIZE_STRING) ;
 		$description = filter_var($post['desc'] , FILTER_SANITIZE_STRING);
 		$visibilite = filter_var($post['visibility'] , FILTER_SANITIZE_STRING);
 
 		if(strlen($titre) < 5) {
-			$this->app->flash->addMessage('Alerte', 'Le titre doit au moins faire 5 caractères !');
+			$this->app->flash->addMessage('Alerte', "[ERREUR] Le titre de la liste doit faire au minimum 5 caractères");
 		} else if(strlen($description) < 5) {
-			$this->app->flash->addMessage('Alerte', 'La description doit au moins faire 5 caractères !');
+			$this->app->flash->addMessage('Alerte', "[ERREUR] La description de la liste doit faire au minimum 5 caractères");
 		}  else {
 			$liste->titre = $titre;
 			$liste->description = $description;
 			$liste->publique = ($visibilite == 'public') ? 1 : 0;
 			$liste->save();
 	
-			$this->app->flash->addMessage('Ok', 'La liste a été modifiée !');
+			$this->app->flash->addMessage('Ok', "[SUCCÈS] La liste a été modifiée");
 		}
 		
         return $rs->withRedirect($this->app->router->pathFor('edition_liste',[ 'tokenPublic' => $tokenPublic, 'tokenPrivate' => $tokenPrivate])); 
 	}
 
+	/**
+	 * Méthode pour ajouter un message sur une liste
+	 */
 	public function addMessage(Request $rq, Response $rs, $args) {
 		$tokenPublic = $args['tokenPublic'];
 
-		$liste = Liste::where ('token', '=', $tokenPublic)->first();
-
+		// Vérification que la liste existe
+		$liste = Liste::where('token', '=', $tokenPublic)->first();
 		if(is_null($liste)){  
-			$this->app->flash->addMessage('Alerte', 'La liste n\'existe pas !');
+			$this->app->flash->addMessage('Alerte', "[ERREUR] La liste n'existe pas");
 			return $rs->withRedirect($this->app->router->pathFor('accueil')); 
 		} 
 
-		if ($liste->isExpired()) 
-		{
-			$this->app->flash->addMessage('Alerte', 'Il n\'est pas possible d\'envoyer un message sur une liste expirée !');
-			return $rs->withRedirect( $this->app->router->pathFor('affichage_liste', ['tokenPublic' => $tokenPublic])); 
-		}
+        // Vérification que la liste n'est pas expirée
+        if ($liste->isExpired()) {
+            $this->app->flash->addMessage('Alerte', "[ERREUR] Impossible d'ajouter un message sur une liste expirée");
+            return $rs->withRedirect($this->app->router->pathFor('affichage_liste', ['tokenPublic' => $tokenPublic]));
+        }
 
+		// Récupération des variables
 		$post = $rq->getParsedBody() ;
 		$message = filter_var($post['message'], FILTER_SANITIZE_STRING) ;
 		$identite = filter_var($post['identite'] , FILTER_SANITIZE_STRING);
 
 		if(strlen($message) < 10) {
-			$this->app->flash->addMessage('Alerte', 'Le message doit au moins faire 10 caractères !');
+			$this->app->flash->addMessage('Alerte', "[ERREUR] Le message doit faire au minimum 10 caractères");
 		} else if(strlen($identite) < 5) {
-			$this->app->flash->addMessage('Alerte', 'Votre pseudo doit faire au moins 5 caractères !');
+			$this->app->flash->addMessage('Alerte', "[ERREUR] Le pseudo doit faire au minimum 5 caractères.");
 		}  else {
 			$listeMessage = new ListeMessage();
 			$listeMessage->liste_id = $liste->id;
@@ -245,7 +257,7 @@ class ListeControleur {
 			// Création cookie identité
 			setcookie("username", serialize ($identite),time() + 60*60*24*365*10, "/" ) ;
 	
-			$this->app->flash->addMessage('Ok', 'Le message a été ajouté.');
+			$this->app->flash->addMessage('Ok', "[SUCCÈS] Le message a été ajouté");
 		}
 
 		return $rs->withRedirect($this->app->router->pathFor('affichage_liste',[ 'tokenPublic' => $tokenPublic,])); 

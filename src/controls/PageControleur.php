@@ -15,9 +15,13 @@ class PageControleur {
 		$this->app = $app;
 	}
 
+	/**
+	 * Index du site
+	 */
 	public function index(Request $rq, Response $rs, $args) {
 		// On récupère l'ensemble des listes publiques, on passera ce tableau à la vue
 		$data = Liste::where ('publique', '=', 1)->where('expiration', '>', date('Y-m-d'))->get()->sortBy('expiration')->toArray();
+		
 		$vue = new VuePage($data, $this->app ) ;
 		$rs->getBody()->write($vue->render()) ;
 		return $rs;

@@ -10,6 +10,9 @@ class VueItem extends Vue
     parent::__construct($data, $container);
   }
 
+  /**
+   * Méthode de rendu
+   */
   public function render($i = null)
   {
 
@@ -32,9 +35,12 @@ class VueItem extends Vue
   }
 
   /*-------------------------------------------------------------------------------------------*/
-  /* MÉTHODE(S) POUR LA PARTIE affichage */
+  /* MÉTHODE(S) POUR LA PARTIE AFFICHAGE */
   /*-------------------------------------------------------------------------------------------*/
 
+  /**
+   * Méthode qui récupère 
+   */
   private function getReservation() {
     if($this->data['reserved']) {
 
@@ -53,7 +59,7 @@ FIN;
       }
     }
     else {
-      $url_reservation = $this->container->router->pathFor('reservation_item', [
+      $urlReservation = $this->container->router->pathFor('reservation_item', [
         'tokenPublic' => $this->data['public'],
         'idItem' => $this->data['item']->id
       ]);
@@ -61,7 +67,7 @@ FIN;
       $identite = $this->data['identite'];
 
       $content = <<<FIN
-      <form method="POST" action="$url_reservation">
+      <form method="POST" action="$urlReservation">
         <textarea rows="4" cols="55" class="form-control" name="message" ></textarea>
         <div class="input-group mb-3 mt-4">
           <span class="input-group-text">Pseudo</span>
@@ -77,10 +83,13 @@ FIN;
     return $content;
   }
 
+  /**
+   * Méthode pour l'affichage de la page ITEM
+   */
   private function voirItem(): string
   {
     // Les variables requises
-    $url_liste = $this->container->router->pathFor('affichage_liste', [
+    $urlListe = $this->container->router->pathFor('affichage_liste', [
       'tokenPublic' => $this->data['public']
     ]);
 
@@ -101,7 +110,7 @@ FIN;
     <div class="my-4 d-flex justify-content-center align-self-center flex-column text-center">
   <h1>$nom</h1>  
   <div class="align-self-center mt-2">
-  <a href="$url_liste" class="btn btn-outline-secondary">Retour à la liste</a>
+  <a href="$urlListe" class="btn btn-outline-secondary">Retour à la liste</a>
 </div>
 </div>
 
@@ -141,9 +150,9 @@ FIN;
   private function formulaireEdition(): string
   {
     // Les variables requises
-    $url_postEdition = $this->container->router->pathFor('edition_item_post', ['tokenPublic' => $this->data['public'], 'tokenPrivate' => $this->data['private'], 'idItem' => $this->data['item']->id ]);
+    $urlPostEdition = $this->container->router->pathFor('edition_item_post', ['tokenPublic' => $this->data['public'], 'tokenPrivate' => $this->data['private'], 'idItem' => $this->data['item']->id ]);
 
-    $url_edition = $this->container->router->pathFor('edition_liste', [
+    $urlEdition = $this->container->router->pathFor('edition_liste', [
       'tokenPublic' => $this->data['public'],
       'tokenPrivate' => $this->data['private'],
     ]);
@@ -160,7 +169,7 @@ FIN;
       <h1 class="my-4 text-center">Édition d'un item</h1>
       <div class="card">
         <div class="card-body">
-          <form role="form" method="POST" action="$url_postEdition">
+          <form role="form" method="POST" action="$urlPostEdition">
             <div class="form-group my-3">
               <label>Titre</label>
               <input type="text" class="form-control" name="titre" placeholder="Titre" value="$nom" required>
@@ -183,7 +192,7 @@ FIN;
         </div>
             <div class="form-group d-flex justify-content-around">
               <button type="submit" class="btn btn-success">Modifier</button>
-              <a class="btn btn-outline-danger" href="$url_edition">Retour</a>
+              <a class="btn btn-outline-danger" href="$urlEdition">Retour</a>
             </div>
           </form>
         </div>
@@ -201,9 +210,9 @@ FIN;
   private function formulaireCreation(): string
   {
     // Les variables requises
-    $url_postCreation = $this->container->router->pathFor('creer_item_post', ['tokenPublic' => $this->data['public'], 'tokenPrivate' => $this->data['private']]);
+    $urlPostCreation = $this->container->router->pathFor('creer_item_post', ['tokenPublic' => $this->data['public'], 'tokenPrivate' => $this->data['private']]);
 
-    $url_edition = $this->container->router->pathFor('edition_liste', [
+    $urlEdition = $this->container->router->pathFor('edition_liste', [
       'tokenPublic' => $this->data['public'],
       'tokenPrivate' => $this->data['private'],
     ]);
@@ -214,7 +223,7 @@ FIN;
       <h1 class="my-4 text-center">Création d'un item</h1>
       <div class="card">
         <div class="card-body">
-          <form role="form" method="POST" action="$url_postCreation">
+          <form role="form" method="POST" action="$urlPostCreation">
             <div class="form-group my-3">
               <label>Titre</label>
               <input type="text" class="form-control" name="titre" placeholder="Titre" required>
@@ -237,7 +246,7 @@ FIN;
         </div>
             <div class="form-group d-flex justify-content-around">
               <button type="submit" class="btn btn-success">Créer</button>
-              <a class="btn btn-outline-danger" href="$url_edition">Retour</a>
+              <a class="btn btn-outline-danger" href="$urlEdition">Retour</a>
             </div>
           </form>
         </div>
