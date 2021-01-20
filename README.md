@@ -47,12 +47,10 @@ Un compte pré-créé :
 Voici quelques lien de liste :
 
 - Anniversaire de Bob : https://webetu.iutnc.univ-lorraine.fr/www/brigue2u/mywishlist/liste/a5e93b7ef126
-  -> LIEN DE MODIFICATION : https://webetu.iutnc.univ-lorraine.fr/www/brigue2u/mywishlist/liste/a5e93b7ef126/edit/62ba67af8e09
+MOFICATION : https://webetu.iutnc.univ-lorraine.fr/www/brigue2u/mywishlist/liste/a5e93b7ef126/edit/62ba67af8e09
 
 - Soirée du 02/02/2021 : https://webetu.iutnc.univ-lorraine.fr/www/brigue2u/mywishlist/liste/4fea9bf46645
-  -> LIEN DE MOFICATION : https://webetu.iutnc.univ-lorraine.fr/www/brigue2u/mywishlist/liste/4fea9bf46645/edit/23ea0d87adf8
-  -> C'EST UNE LISTE PUBLIQUE DONC ELLE APPARAÎT SUR L'ACCUEIL
-
+MOFICATION : https://webetu.iutnc.univ-lorraine.fr/www/brigue2u/mywishlist/liste/4fea9bf46645/edit/23ea0d87adf8
 
 ## Quelques informations par rapport au projet
 
