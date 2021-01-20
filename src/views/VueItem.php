@@ -179,11 +179,11 @@ FIN;
               <textarea class="form-control" name="desc" placeholder="Description" required>$desc</textarea>
             </div>
             <div class="form-group my-3">
-              <label>URL vers une page marché</label>
+              <label>URL vers une page marchande (facultative)</label>
               <input type="text" class="form-control" name="url" placeholder="URL Page produit" value="$url">
             </div>
             <div class="form-group my-3">
-            <label>URL Image</label>
+            <label>URL Image (facultative)</label>
             <input type="text" class="form-control" name="img" placeholder="URL Image" value="$img">
           </div>
           <div class="form-group my-3">
@@ -233,11 +233,11 @@ FIN;
               <textarea class="form-control" name="desc" placeholder="Description" required></textarea>
             </div>
             <div class="form-group my-3">
-              <label>URL vers une page marché</label>
+              <label>URL vers une page marché (facultative)</label>
               <input type="text" class="form-control" name="url" placeholder="URL Page produit">
             </div>
             <div class="form-group my-3">
-            <label>URL Image</label>
+            <label>URL Image (facultative)</label>
             <input type="text" class="form-control" name="img" placeholder="URL Image">
           </div>
           <div class="form-group my-3">

@@ -71,10 +71,17 @@ FIN;
       <div class="card mb-4">
         <h5 class="card-header">Comment ça marche ?</h5>
         <div class="card-body">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
-          Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
-          Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
-          Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+          Bienvenue sur MyWishList, un site de gestion de liste de souhait !</br></br>
+          <b>Voici quelques fonctionnalités :</b></br>
+          <ul>
+            <li>Système de liste de souhaits : création / modification :</li>
+            <li>Système d'items sur les listes : création / modification / suppression / réservation </li>
+            <li>Affichage de liste de souhaits, affichage des items</li>
+            <li>Ajout de message sur les liste de souhaits</li>
+            <li>Partage de liste de souhaits</li>
+            <li>Liste de souhaits publiques / privées</li>
+            <li>Système de compte : inscription / connexion / déconnexion</li>
+          </ul>
         </div>
       </div>
     </div>

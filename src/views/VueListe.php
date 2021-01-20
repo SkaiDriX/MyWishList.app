@@ -27,7 +27,7 @@ class VueListe extends Vue
         break;
       case 3:
         $this->content = $this->voirListe();
-        $this->titre_page = "Voir une liste";
+        $this->titre_page = "Affichage d'une liste";
         break;
     }
 
@@ -41,12 +41,13 @@ class VueListe extends Vue
   /**
    * Méthode pour récuperer la liste des items
    */
-  private function getItems() {
+  private function getItems()
+  {
     $html = "";
 
-    foreach($this->data['items'] as $i) {
+    foreach ($this->data['items'] as $i) {
       $titre = $i->nom;
-      
+
       $urlEdit = $this->container->router->pathFor('edition_item', [
         'tokenPublic' => $this->data['liste']->token,
         'tokenPrivate' => $this->data['liste']->token_edit,
@@ -60,14 +61,14 @@ class VueListe extends Vue
       ]);
 
       // On regarde si l'item est réservé
-      if($i->isReserved()) {
+      if ($i->isReserved()) {
         $etat = '<span class="badge rounded-pill bg-danger">Réservé</span>';
         $btn = '';
       } else {
         $etat = '<span class="badge rounded-pill bg-success">Non réservé</span>';
         $btn = '<div>
-        <a class="btn btn-success" href="'.$urlEdit.'">Éditer</a>
-        <a class="btn btn-danger" href="'.$urlDelete.'">Supprimer</a>
+        <a class="btn btn-success" href="' . $urlEdit . '">Éditer</a>
+        <a class="btn btn-danger" href="' . $urlDelete . '">Supprimer</a>
         </div>';
       }
 
@@ -190,9 +191,14 @@ FIN;
   
   <div class="col-md-5">
     <div class="card text-white bg-danger">
-      <h5 class="card-header">Token de modification</h5>
+      <h5 class="card-header">Tokens</h5>
       <div class="card-body">
-        <p style="text-align:justify;">Veuillez sauvegarder ce token de modification, sans lui vous ne pourrez plus modifier votre liste !<p>
+      <p style="text-align:justify;">Voici le token publique de votre liste, veuillez le garder car vous en aurez besoin en complétement du token de modification !<p>      
+      <li class="list-group-item" style="background-color: #00000059;">
+        <h5 class="text-center">$token</h5>
+      </li>
+      </br>
+        <p style="text-align:justify;">Veuillez sauvegarder ce token de modification, sans lui vous ne pourrez plus modifier votre liste !<p>      
         <li class="list-group-item" style="background-color: #00000059;">
           <h5 class="text-center">$edit</h5>
         </li>
@@ -272,22 +278,23 @@ FIN;
   /*-------------------------------------------------------------------------------------------*/
   /* MÉTHODE(S) POUR LA PARTIE AFFICHAGE DE LISTE */
   /*-------------------------------------------------------------------------------------------*/
-  
+
   /**
    * Méthode pour l'affichage des items (côté liste)
    */
-  private function affichageItems () {
+  private function affichageItems()
+  {
     $html = "";
 
-    foreach($this->data['items'] as $i) {
+    foreach ($this->data['items'] as $i) {
       $titre = $i->nom;
-      
+
       $urlItem = $this->container->router->pathFor('affichage_item', [
         'tokenPublic' => $this->data['liste']->token,
         'idItem' => $i->id
       ]);
 
-      if($i->isReserved()) {
+      if ($i->isReserved()) {
         $etat = '<span class="badge rounded-pill bg-danger">Réservé</span>';
       } else {
         $etat = '<span class="badge rounded-pill bg-success">Non réservé</span>';
@@ -315,10 +322,11 @@ FIN;
   /**
    * Méthode pour récupérer les messages
    */
-  private function getMessages() : string {
+  private function getMessages(): string
+  {
     $html = "";
 
-    foreach($this->data['messages'] as $m) {
+    foreach ($this->data['messages'] as $m) {
       $date = date('d F Y', strtotime($m['date']));
       $message = $m['message'];
       $nom = $m['nom'];
@@ -355,10 +363,10 @@ FIN;
 
     $urlMessage = $this->container->router->pathFor('add_message_post', [
       'tokenPublic' => $liste->token
-    ]); 
+    ]);
 
     // On regarde si la liste est expirée
-    if($this->data['expired']) {
+    if ($this->data['expired']) {
       $expirationDate = "Expirée";
     } else {
       $expirationDate = $liste->expiration;
@@ -376,8 +384,8 @@ FIN;
         <div class="align-self-center mt-2">
           <a href="' . $urlEdition . '" class="btn btn-outline-danger">Modifier la liste</a>
         </div>';
-    } 
-  
+    }
+
     // Affichage des messages si on est le créateur ou pas
     if ($isCreateur == 1 && !$this->data['expired']) {
       $listeMessages = "En tant que créateur de la liste, vous ne pouvez pas voir les messages tant qu'elle n'est pas expirée !";
@@ -387,7 +395,7 @@ FIN;
 
     // Récupération des items
     $items = $this->affichageItems();
-    
+
     // L'affichage
     $html = <<<FIN
 
